@@ -2,11 +2,11 @@
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ENV_FILE="${ROOT_DIR}/.env"
+# shellcheck source=./common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "Missing ${ENV_FILE}. Create it from .env.dist." >&2
+  echo "Missing ${ENV_FILE}. Create it from .env.dist or host-local config." >&2
   exit 1
 fi
 
@@ -35,13 +35,13 @@ for var_name in "${required_vars[@]}"; do
   fi
 done
 
-if [[ ! -f "${ROOT_DIR}/config/nginx/ssl/tls.crt" ]]; then
-  echo "Missing TLS certificate: config/nginx/ssl/tls.crt" >&2
+if [[ ! -f "${TLS_CERT_SOURCE}" ]]; then
+  echo "Missing TLS certificate: ${TLS_CERT_SOURCE}" >&2
   exit 1
 fi
 
-if [[ ! -f "${ROOT_DIR}/config/nginx/ssl/tls.key" ]]; then
-  echo "Missing TLS private key: config/nginx/ssl/tls.key" >&2
+if [[ ! -f "${TLS_KEY_SOURCE}" ]]; then
+  echo "Missing TLS private key: ${TLS_KEY_SOURCE}" >&2
   exit 1
 fi
 

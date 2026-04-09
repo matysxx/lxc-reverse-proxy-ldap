@@ -7,7 +7,8 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=./common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 
 cd "${ROOT_DIR}"
 systemctl stop nginx

@@ -20,7 +20,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 
 ## Układ repo
 
-- `.env.dist` - zmienne środowiskowe do skopiowania do `.env`
+- `.env.dist` - przykładowe zmienne środowiskowe
 - `scripts/bootstrap-host.sh` - instalacja pakietów i pierwsza konfiguracja
 - `scripts/check-env.sh` - walidacja lokalnej konfiguracji
 - `scripts/render-config.sh` - renderowanie plików z szablonów
@@ -47,14 +47,15 @@ Poza tym LXC:
 
 ## Szybki start
 
-1. Skopiuj konfigurację:
+1. Przygotuj host-local konfigurację:
 
    ```bash
-   cp .env.dist .env
+   install -d -m 0755 /etc/lxc-reverse-proxy-ldap/ssl
+   cp .env.dist /etc/lxc-reverse-proxy-ldap/env
    ```
 
-2. Uzupełnij `.env`.
-3. Dodaj certyfikat do `config/nginx/ssl/`.
+2. Uzupełnij `/etc/lxc-reverse-proxy-ldap/env`.
+3. Dodaj certyfikat do `/etc/lxc-reverse-proxy-ldap/ssl/`.
 4. Na świeżym Debianie 13 uruchom:
 
    ```bash
@@ -71,8 +72,31 @@ Poza tym LXC:
 
    ```bash
    systemctl status slapd nginx
+   . /etc/lxc-reverse-proxy-ldap/env
    ldapsearch -x -D "$LDAP_ADMIN_DN" -W -b "$LDAP_BASE_DN"
    ```
+
+## Host-Local Configuration
+
+Aktywna konfiguracja wdrożeniowa nie powinna żyć w repo.
+
+Docelowy układ na hoście:
+
+- `/etc/lxc-reverse-proxy-ldap/env` - aktywne zmienne środowiskowe
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.crt`
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.key`
+- `/etc/nginx/conf.d/*.conf` - lokalne vhosty i reverse proxy dla usług klienta
+- `/root/lxc-reverse-proxy-ldap.secrets` - lokalne sekrety operatorskie
+
+Repo w `/opt/lxc-reverse-proxy-ldap` ma pozostać czyste gitowo i zawierać tylko:
+
+- skrypty
+- szablony
+- dokumentację
+- przykładowe pliki startowe
+
+Jeżeli `/etc/lxc-reverse-proxy-ldap/env` istnieje, skrypty używają go zamiast
+repozytoryjnego `.env`.
 
 ## Usługi
 
@@ -111,6 +135,10 @@ Najważniejsze zmienne:
 - `LDAP_PHPLDAPADMIN_ENABLED`
 - `PROXY_HTTP_PORT`
 - `PROXY_HTTPS_PORT`
+
+W modelu host-local plik powinien leżeć jako:
+
+- `/etc/lxc-reverse-proxy-ldap/env`
 
 ## Przykładowe wpisy LDAP
 

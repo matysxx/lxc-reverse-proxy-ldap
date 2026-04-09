@@ -2,12 +2,11 @@
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ENV_FILE="${ROOT_DIR}/.env"
-RUNTIME_DIR="${ROOT_DIR}/runtime"
+# shellcheck source=./common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "Missing ${ENV_FILE}. Create it from .env.dist." >&2
+  echo "Missing ${ENV_FILE}. Create it from .env.dist or host-local config." >&2
   exit 1
 fi
 
@@ -44,7 +43,7 @@ envsubst \
 
 if [[ -d /etc/nginx/conf.d ]]; then
   install -d -m 0755 /etc/nginx/ssl
-  install -m 0644 "${ROOT_DIR}/config/nginx/ssl/tls.crt" /etc/nginx/ssl/tls.crt
-  install -m 0600 "${ROOT_DIR}/config/nginx/ssl/tls.key" /etc/nginx/ssl/tls.key
+  install -m 0644 "${TLS_CERT_SOURCE}" /etc/nginx/ssl/tls.crt
+  install -m 0600 "${TLS_KEY_SOURCE}" /etc/nginx/ssl/tls.key
   install -m 0644 "${RUNTIME_DIR}/ldap-admin.conf" /etc/nginx/conf.d/ldap-admin.conf
 fi

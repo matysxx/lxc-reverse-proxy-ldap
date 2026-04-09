@@ -23,12 +23,13 @@ apt-get update && apt-get install -y git
 cd /opt
 git clone <nowe-repo> lxc-reverse-proxy-ldap
 cd /opt/lxc-reverse-proxy-ldap
-cp .env.dist .env
+install -d -m 0755 /etc/lxc-reverse-proxy-ldap/ssl
+cp .env.dist /etc/lxc-reverse-proxy-ldap/env
 ```
 
 ## 4. Konfiguracja
 
-Ustaw w `.env`:
+Ustaw w `/etc/lxc-reverse-proxy-ldap/env`:
 
 - domenę LDAP
 - DN bazowy
@@ -43,10 +44,10 @@ pozostawi działający `slapd` i `nginx`, ale bez panelu WWW.
 Dodaj certyfikat:
 
 ```bash
-mkdir -p config/nginx/ssl
-cp /ścieżka/do/tls.crt config/nginx/ssl/tls.crt
-cp /ścieżka/do/tls.key config/nginx/ssl/tls.key
-chmod 600 config/nginx/ssl/tls.key
+mkdir -p /etc/lxc-reverse-proxy-ldap/ssl
+cp /ścieżka/do/tls.crt /etc/lxc-reverse-proxy-ldap/ssl/tls.crt
+cp /ścieżka/do/tls.key /etc/lxc-reverse-proxy-ldap/ssl/tls.key
+chmod 600 /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 ```
 
 ## 5. Bootstrap i start
@@ -60,8 +61,12 @@ sudo ./scripts/start.sh
 
 ```bash
 systemctl status slapd nginx
-ldapsearch -x -D "cn=admin,dc=home,dc=arpa" -W -b "dc=home,dc=arpa"
+. /etc/lxc-reverse-proxy-ldap/env
+ldapsearch -x -D "$LDAP_ADMIN_DN" -W -b "$LDAP_BASE_DN"
 ```
+
+Lokalne vhosty i reverse proxy dla usług klienta powinny być utrzymywane poza
+repo, bezpośrednio na hoście, np. w `/etc/nginx/conf.d/`.
 
 ## 7. Import przykładowych wpisów
 

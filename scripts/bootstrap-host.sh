@@ -7,11 +7,11 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ENV_FILE="${ROOT_DIR}/.env"
+# shellcheck source=./common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "Missing ${ENV_FILE}. Create it from .env.dist first." >&2
+  echo "Missing ${ENV_FILE}. Create it from .env.dist or host-local config first." >&2
   exit 1
 fi
 
@@ -52,8 +52,9 @@ if [[ "${LDAP_PHPLDAPADMIN_ENABLED}" == "true" ]] && apt-cache show phpldapadmin
   phpldapadmin_available=true
 fi
 
-install -d -m 0755 "${ROOT_DIR}/runtime"
-install -d -m 0755 "${ROOT_DIR}/config/nginx/ssl"
+install -d -m 0755 "${RUNTIME_DIR}"
+install -d -m 0755 "${HOST_CONFIG_DIR}"
+install -d -m 0755 "${HOST_CONFIG_DIR}/ssl"
 
 "${ROOT_DIR}/scripts/render-config.sh"
 
