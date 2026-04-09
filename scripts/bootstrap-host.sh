@@ -64,9 +64,9 @@ fi
 systemctl enable slapd nginx
 systemctl restart slapd
 
-if ! ldapsearch -Y EXTERNAL -H ldapi:/// -b "${LDAP_BASE_DN}" -s base dn >/dev/null 2>&1; then
+if ! ldapsearch -x -D "${LDAP_ADMIN_DN}" -w "${LDAP_ADMIN_PASSWORD}" -b "${LDAP_USERS_OU},${LDAP_BASE_DN}" -s base dn >/dev/null 2>&1; then
   if ! ldapadd -x -D "${LDAP_ADMIN_DN}" -w "${LDAP_ADMIN_PASSWORD}" -f "${ROOT_DIR}/runtime/base.ldif"; then
-    echo "Failed to import base LDIF. Verify LDAP_ADMIN_DN and LDAP_BASE_DN." >&2
+    echo "Failed to import LDAP organizational units. Verify LDAP_ADMIN_DN and LDAP_BASE_DN." >&2
     exit 1
   fi
 fi
