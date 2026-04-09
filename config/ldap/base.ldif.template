@@ -1,0 +1,7 @@
+dn: ${LDAP_USERS_OU},${LDAP_BASE_DN}
+objectClass: organizationalUnit
+ou: people
+
+dn: ${LDAP_GROUPS_OU},${LDAP_BASE_DN}
+objectClass: organizationalUnit
+ou: groups

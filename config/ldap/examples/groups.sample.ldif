@@ -1,0 +1,21 @@
+dn: cn=ldap-users,ou=groups,dc=home,dc=arpa
+objectClass: top
+objectClass: posixGroup
+cn: ldap-users
+gidNumber: 20000
+memberUid: jkowalski
+
+dn: cn=nextcloud-users,ou=groups,dc=home,dc=arpa
+objectClass: top
+objectClass: posixGroup
+cn: nextcloud-users
+gidNumber: 20001
+memberUid: jkowalski
+memberUid: anowak
+
+dn: cn=storage-users,ou=groups,dc=home,dc=arpa
+objectClass: top
+objectClass: posixGroup
+cn: storage-users
+gidNumber: 20002
+memberUid: anowak

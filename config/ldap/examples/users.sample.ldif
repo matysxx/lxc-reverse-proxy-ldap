@@ -1,0 +1,31 @@
+dn: uid=jkowalski,ou=people,dc=home,dc=arpa
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Jan Kowalski
+sn: Kowalski
+givenName: Jan
+displayName: Jan Kowalski
+uid: jkowalski
+uidNumber: 10000
+gidNumber: 20000
+homeDirectory: /srv/home/jkowalski
+loginShell: /bin/bash
+mail: jan.kowalski@home.arpa
+userPassword: {SSHA}REPLACE_WITH_HASH
+
+dn: uid=anowak,ou=people,dc=home,dc=arpa
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Anna Nowak
+sn: Nowak
+givenName: Anna
+displayName: Anna Nowak
+uid: anowak
+uidNumber: 10001
+gidNumber: 20001
+homeDirectory: /srv/home/anowak
+loginShell: /bin/bash
+mail: anna.nowak@home.arpa
+userPassword: {SSHA}REPLACE_WITH_HASH
