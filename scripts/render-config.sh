@@ -43,5 +43,8 @@ envsubst \
   > "${RUNTIME_DIR}/base.ldif"
 
 if [[ -d /etc/nginx/conf.d ]]; then
+  install -d -m 0755 /etc/nginx/ssl
+  install -m 0644 "${ROOT_DIR}/config/nginx/ssl/tls.crt" /etc/nginx/ssl/tls.crt
+  install -m 0600 "${ROOT_DIR}/config/nginx/ssl/tls.key" /etc/nginx/ssl/tls.key
   install -m 0644 "${RUNTIME_DIR}/ldap-admin.conf" /etc/nginx/conf.d/ldap-admin.conf
 fi
