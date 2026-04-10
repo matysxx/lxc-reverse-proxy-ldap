@@ -132,3 +132,28 @@ Najprostsze użycie:
 sudo ./scripts/backup-host.sh
 sudo ./scripts/restore-host.sh /var/backups/lxc-reverse-proxy-ldap/backup-<hostname>-<timestamp>.tar.gz --force
 ```
+
+## 11. Logi i rotacja
+
+Skrypty:
+
+- `scripts/setup-logging.sh`
+- `scripts/apply-nginx-vhost-logging.sh`
+
+Zakładany układ:
+
+- `/var/log/nginx/services/*.access.log`
+- `/var/log/nginx/services/*.error.log`
+- `/var/log/lxc-reverse-proxy-ldap-backup.log`
+
+Rotacja:
+
+- osobna konfiguracja `logrotate` w `/etc/logrotate.d/lxc-reverse-proxy-ldap`
+- domyślnie `daily`, `rotate 30`, `compress`
+
+Wdrożenie:
+
+```bash
+sudo ./scripts/setup-logging.sh
+sudo ./scripts/apply-nginx-vhost-logging.sh
+```

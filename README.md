@@ -25,11 +25,14 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `scripts/check-env.sh` - walidacja lokalnej konfiguracji
 - `scripts/backup-host.sh` - backup rotacyjny LDAP i host-local config
 - `scripts/restore-host.sh` - przywracanie z archiwum backupu
+- `scripts/setup-logging.sh` - katalogi logów i konfiguracja logrotate
+- `scripts/apply-nginx-vhost-logging.sh` - per-vhost logi `nginx`
 - `scripts/render-config.sh` - renderowanie plików z szablonów
 - `scripts/start.sh` - przeładowanie i start usług
 - `scripts/stop.sh` - zatrzymanie usług
 - `config/ldap/` - szablony LDAP i LDIF
 - `config/nginx/` - konfiguracja reverse proxy
+- `config/logrotate/` - szablon rotacji logów usług
 - `docs/` - opis architektury, wdrożenia i integracji
 - `docs/backup.md` - procedura backupu i odtwarzania
 - `proxmox/` - notatki dla LXC w Proxmox
@@ -92,6 +95,8 @@ Docelowy układ na hoście:
 - `/etc/lxc-reverse-proxy-ldap/ssl/tls.key`
 - `/etc/nginx/conf.d/*.conf` - lokalne vhosty i reverse proxy dla usług klienta
 - `/root/lxc-reverse-proxy-ldap.secrets` - lokalne sekrety operatorskie
+- `/var/log/nginx/services/` - per-vhost access/error logi `nginx`
+- `/var/log/lxc-reverse-proxy-ldap-backup.log` - log backupów
 
 Repo w `/opt/lxc-reverse-proxy-ldap` ma pozostać czyste gitowo i zawierać tylko:
 
@@ -133,6 +138,7 @@ Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
 - wystawia panel LDAP pod wskazanym hostname
 - może później obsłużyć także inne narzędzia administracyjne
 - może też wystawiać statyczny portal usług z szablonu repo
+- może logować ruch per vhost do osobnych plików
 
 ### phpLDAPadmin
 

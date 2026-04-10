@@ -1,0 +1,15 @@
+${NGINX_SERVICE_LOG_DIR}/*.log ${BACKUP_LOG_FILE} {
+  daily
+  missingok
+  rotate 30
+  compress
+  delaycompress
+  notifempty
+  create 0640 www-data adm
+  sharedscripts
+  postrotate
+    if [ -f /run/nginx.pid ]; then
+      kill -USR1 "$(cat /run/nginx.pid)" >/dev/null 2>&1 || true
+    fi
+  endscript
+}
