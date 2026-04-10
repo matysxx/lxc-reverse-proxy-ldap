@@ -39,6 +39,7 @@ apt-get install -y \
   ca-certificates \
   gettext-base \
   ldap-utils \
+  logrotate \
   mc \
   nginx \
   openssl \
@@ -57,6 +58,7 @@ install -d -m 0755 "${RUNTIME_DIR}"
 install -d -m 0755 "${HOST_CONFIG_DIR}"
 install -d -m 0755 "${HOST_CONFIG_DIR}/ssl"
 
+"${ROOT_DIR}/scripts/setup-logging.sh"
 "${ROOT_DIR}/scripts/render-config.sh"
 
 if [[ -f /etc/default/slapd ]]; then

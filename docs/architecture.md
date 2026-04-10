@@ -55,3 +55,4 @@ Jeden kontener LXC w Proxmox ma zapewnić:
 - hasła z `.env` powinny zostać zastąpione sekretami lub bezpiecznym vaultem
 - katalog powinien być regularnie eksportowany przez `slapcat`
 - host-local konfiguracja reverse proxy powinna być objęta tym samym backupem
+- logi `nginx` warto rozdzielić per vhost dla szybszego audytu incydentów
