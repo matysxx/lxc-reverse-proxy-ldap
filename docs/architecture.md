@@ -54,3 +54,4 @@ Jeden kontener LXC w Proxmox ma zapewnić:
 - panel `phpLDAPadmin` powinien być ograniczony przynajmniej DNS-em i siecią
 - hasła z `.env` powinny zostać zastąpione sekretami lub bezpiecznym vaultem
 - katalog powinien być regularnie eksportowany przez `slapcat`
+- host-local konfiguracja reverse proxy powinna być objęta tym samym backupem

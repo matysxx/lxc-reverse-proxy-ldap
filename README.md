@@ -23,12 +23,15 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `.env.dist` - przykładowe zmienne środowiskowe
 - `scripts/bootstrap-host.sh` - instalacja pakietów i pierwsza konfiguracja
 - `scripts/check-env.sh` - walidacja lokalnej konfiguracji
+- `scripts/backup-host.sh` - backup rotacyjny LDAP i host-local config
+- `scripts/restore-host.sh` - przywracanie z archiwum backupu
 - `scripts/render-config.sh` - renderowanie plików z szablonów
 - `scripts/start.sh` - przeładowanie i start usług
 - `scripts/stop.sh` - zatrzymanie usług
 - `config/ldap/` - szablony LDAP i LDIF
 - `config/nginx/` - konfiguracja reverse proxy
 - `docs/` - opis architektury, wdrożenia i integracji
+- `docs/backup.md` - procedura backupu i odtwarzania
 - `proxmox/` - notatki dla LXC w Proxmox
 - `templates/service-index/` - szablon statycznej strony startowej usług
 - `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
@@ -122,6 +125,7 @@ Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
 - działa jako `slapd`
 - przechowuje użytkowników, grupy i strukturę OU
 - stanowi źródło logowania dla Nextcloud
+- powinien być regularnie eksportowany przez `slapcat`
 
 ### nginx
 
@@ -176,7 +180,6 @@ ldapadd -x -D "$LDAP_ADMIN_DN" -W -f config/ldap/examples/groups.sample.ldif
 
 ## Dalsze kroki
 
-- dodać backup LDAP przez `slapcat`
 - ograniczyć dostęp do panelu LDAP po sieci lub ACL
 - dopisać integrację PAM/SSSD na serwerach danych
 - dopisać instrukcję spięcia z Nextcloud na produkcji

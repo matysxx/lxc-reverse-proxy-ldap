@@ -39,6 +39,9 @@ Ustaw w `/etc/lxc-reverse-proxy-ldap/env`:
 - hostname dla `phpLDAPadmin`
 - porty HTTP i HTTPS
 - flagę `LDAP_PHPLDAPADMIN_ENABLED`
+- opcjonalnie:
+  - `BACKUP_ROOT`
+  - `BACKUP_KEEP_COUNT`
 
 Jeżeli w docelowym repozytorium APT nie będzie pakietu `phpldapadmin`, bootstrap
 pozostawi działający `slapd` i `nginx`, ale bez panelu WWW.
@@ -113,7 +116,19 @@ Dodaj rekordy DNS wskazujące na adres LXC:
 
 ## 9. Następne rozszerzenia
 
-- backup LDAP przez `slapcat`
 - certyfikaty z ACME
 - dodatkowe upstreamy za `nginx`
 - integracja SSSD/PAM na serwerach danych
+
+## 10. Backup i restore
+
+Mechanizm backupu i odtwarzania jest opisany w:
+
+- `docs/backup.md`
+
+Najprostsze użycie:
+
+```bash
+sudo ./scripts/backup-host.sh
+sudo ./scripts/restore-host.sh /var/backups/lxc-reverse-proxy-ldap/backup-<hostname>-<timestamp>.tar.gz --force
+```
