@@ -20,6 +20,9 @@ BACKUP_LOG_FILE="${BACKUP_LOG_FILE:-/var/log/lxc-reverse-proxy-ldap-backup.log}"
 LOGROTATE_TEMPLATE="${ROOT_DIR}/config/logrotate/lxc-reverse-proxy-ldap.conf.template"
 LOGROTATE_TARGET="/etc/logrotate.d/lxc-reverse-proxy-ldap"
 
+export NGINX_SERVICE_LOG_DIR
+export BACKUP_LOG_FILE
+
 install -d -m 0755 "${NGINX_SERVICE_LOG_DIR}"
 touch "${BACKUP_LOG_FILE}"
 chown root:adm "${BACKUP_LOG_FILE}"
