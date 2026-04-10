@@ -27,6 +27,8 @@ install -d -m 0755 /etc/lxc-reverse-proxy-ldap/ssl
 cp .env.dist /etc/lxc-reverse-proxy-ldap/env
 ```
 
+Skrypt bootstrap zainstaluje też `mc` jako narzędzie operatorskie na LXC.
+
 ## 4. Konfiguracja
 
 Ustaw w `/etc/lxc-reverse-proxy-ldap/env`:
@@ -72,6 +74,14 @@ ldapsearch -x -D "$LDAP_ADMIN_DN" -W -b "$LDAP_BASE_DN"
 
 Lokalne vhosty i reverse proxy dla usług klienta powinny być utrzymywane poza
 repo, bezpośrednio na hoście, np. w `/etc/nginx/conf.d/`.
+
+Jeżeli chcesz wystawić portal startowy usług, użyj repozytoryjnego szablonu:
+
+- `templates/service-index/index.html`
+
+i opublikuj go lokalnie na LXC poza repo, np. jako:
+
+- `/var/www/service-index/index.html`
 
 ## 7. Import przykładowych wpisów
 

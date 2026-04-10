@@ -39,6 +39,7 @@ apt-get install -y \
   ca-certificates \
   gettext-base \
   ldap-utils \
+  mc \
   nginx \
   openssl \
   slapd

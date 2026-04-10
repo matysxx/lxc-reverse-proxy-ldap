@@ -30,6 +30,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `config/nginx/` - konfiguracja reverse proxy
 - `docs/` - opis architektury, wdrożenia i integracji
 - `proxmox/` - notatki dla LXC w Proxmox
+- `templates/service-index/` - szablon statycznej strony startowej usług
 - `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
 
 ## Architektura
@@ -106,6 +107,14 @@ Aktywne certyfikaty używane przez `nginx` nadal powinny leżeć wyłącznie w:
 - `/etc/lxc-reverse-proxy-ldap/ssl/tls.crt`
 - `/etc/lxc-reverse-proxy-ldap/ssl/tls.key`
 
+Szablon portalu usług znajduje się w:
+
+- `templates/service-index/index.html`
+
+Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
+
+- `/var/www/service-index/index.html`
+
 ## Usługi
 
 ### OpenLDAP
@@ -119,6 +128,7 @@ Aktywne certyfikaty używane przez `nginx` nadal powinny leżeć wyłącznie w:
 - nasłuchuje na `80` i `443`
 - wystawia panel LDAP pod wskazanym hostname
 - może później obsłużyć także inne narzędzia administracyjne
+- może też wystawiać statyczny portal usług z szablonu repo
 
 ### phpLDAPadmin
 
@@ -170,3 +180,4 @@ ldapadd -x -D "$LDAP_ADMIN_DN" -W -f config/ldap/examples/groups.sample.ldif
 - ograniczyć dostęp do panelu LDAP po sieci lub ACL
 - dopisać integrację PAM/SSSD na serwerach danych
 - dopisać instrukcję spięcia z Nextcloud na produkcji
+- dodać host-local vhost dla portalu usług
