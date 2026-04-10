@@ -30,6 +30,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `config/nginx/` - konfiguracja reverse proxy
 - `docs/` - opis architektury, wdrożenia i integracji
 - `proxmox/` - notatki dla LXC w Proxmox
+- `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
 
 ## Architektura
 
@@ -97,6 +98,13 @@ Repo w `/opt/lxc-reverse-proxy-ldap` ma pozostać czyste gitowo i zawierać tylk
 
 Jeżeli `/etc/lxc-reverse-proxy-ldap/env` istnieje, skrypty używają go zamiast
 repozytoryjnego `.env`.
+
+Katalog `runtime/certs/` w repo może służyć wyłącznie jako miejsce robocze do
+odłożenia wyeksportowanych plików przed ręcznym przeniesieniem na host.
+Aktywne certyfikaty używane przez `nginx` nadal powinny leżeć wyłącznie w:
+
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.crt`
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.key`
 
 ## Usługi
 

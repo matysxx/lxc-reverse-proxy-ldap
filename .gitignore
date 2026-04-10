@@ -4,3 +4,6 @@ config/nginx/ssl/tls.crt
 config/nginx/ssl/tls.key
 runtime/*
 !runtime/.gitkeep
+!runtime/certs/
+runtime/certs/*
+!runtime/certs/.gitkeep

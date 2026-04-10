@@ -50,6 +50,11 @@ cp /ścieżka/do/tls.key /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 chmod 600 /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 ```
 
+Jeżeli potrzebujesz krótkiego miejsca roboczego na pliki wyeksportowane np. z
+MikroTika, użyj `runtime/certs/` w repo tylko jako staging area. Docelowe pliki
+używane przez `nginx` muszą zostać przeniesione poza repo do
+`/etc/lxc-reverse-proxy-ldap/ssl/`.
+
 ## 5. Bootstrap i start
 
 ```bash
