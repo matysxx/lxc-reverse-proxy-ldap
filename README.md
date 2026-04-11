@@ -4,8 +4,10 @@ Schemat repozytorium do uruchomienia jednego kontenera LXC w Proxmox z Debianem
 13, w którym usługi działają natywnie w systemie:
 
 - `OpenLDAP` jako centralny katalog użytkowników i grup
-- `nginx` jako reverse proxy dla panelu LDAP
+- `nginx` jako reverse proxy dla panelu LDAP i host-local usług klienta
 - opcjonalny `phpLDAPadmin`
+- statyczny portal usług publikowany przez `nginx`
+- backup, restore i logging per-vhost dla wdrożenia host-local
 
 Repo nie używa `docker compose`. To celowe: dla LXC prostsze i bezpieczniejsze
 jest utrzymanie usług bez zagnieżdżania kontenerów.
@@ -35,9 +37,12 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `config/logrotate/` - szablon rotacji logów usług
 - `docs/` - opis architektury, wdrożenia i integracji
 - `docs/backup.md` - procedura backupu i odtwarzania
+- `docs/logging.md` - logi usług i rotacja logów
 - `proxmox/` - notatki dla LXC w Proxmox
 - `templates/service-index/` - szablon statycznej strony startowej usług
 - `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
+- `.ai/` - repo-scoped workflow i kontekst projektu dla agentów
+- `.codex/AGENTS.md` - repo-scoped entrypoint dla narzędzi Codex
 
 ## Architektura
 
@@ -46,6 +51,8 @@ Rola tego LXC:
 - utrzymywanie katalogu LDAP dla logowania i grup
 - wystawienie panelu administracyjnego przez HTTPS
 - dostarczenie źródła użytkowników dla Nextcloud
+- pełnienie roli host-local reverse proxy dla wybranych usług wewnętrznych
+- publikowanie statycznego portalu usług z szablonu repo
 
 Poza tym LXC:
 
@@ -104,6 +111,7 @@ Repo w `/opt/lxc-reverse-proxy-ldap` ma pozostać czyste gitowo i zawierać tylk
 - szablony
 - dokumentację
 - przykładowe pliki startowe
+- repo-scoped `.ai` i `.codex`
 
 Jeżeli `/etc/lxc-reverse-proxy-ldap/env` istnieje, skrypty używają go zamiast
 repozytoryjnego `.env`.
@@ -136,8 +144,8 @@ Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
 
 - nasłuchuje na `80` i `443`
 - wystawia panel LDAP pod wskazanym hostname
-- może później obsłużyć także inne narzędzia administracyjne
-- może też wystawiać statyczny portal usług z szablonu repo
+- obsługuje host-local vhosty reverse proxy dla usług klienta
+- wystawia statyczny portal usług z szablonu repo
 - może logować ruch per vhost do osobnych plików
 
 ### phpLDAPadmin
@@ -189,4 +197,5 @@ ldapadd -x -D "$LDAP_ADMIN_DN" -W -f config/ldap/examples/groups.sample.ldif
 - ograniczyć dostęp do panelu LDAP po sieci lub ACL
 - dopisać integrację PAM/SSSD na serwerach danych
 - dopisać instrukcję spięcia z Nextcloud na produkcji
-- dodać host-local vhost dla portalu usług
+- dopisać smoke testy dla backup/restore
+- uporządkować warningi `nginx` dotyczące `listen ... http2`
