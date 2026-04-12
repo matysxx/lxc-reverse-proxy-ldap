@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Run this script as root." >&2
   exit 1
@@ -17,11 +19,17 @@ fi
 
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/lxc-reverse-proxy-ldap}"
 BACKUP_KEEP_COUNT="${BACKUP_KEEP_COUNT:-14}"
+SLAPCAT_BIN="$(command -v slapcat || true)"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 HOSTNAME_SHORT="$(hostname -s)"
 ARCHIVE_NAME="backup-${HOSTNAME_SHORT}-${STAMP}.tar.gz"
 WORKDIR="$(mktemp -d)"
 STAGING_DIR="${WORKDIR}/bundle"
+
+if [[ -z "${SLAPCAT_BIN}" ]]; then
+  echo "slapcat not found in PATH: ${PATH}" >&2
+  exit 1
+fi
 
 cleanup() {
   rm -rf "${WORKDIR}"
@@ -43,8 +51,8 @@ install -d -m 0755 "${STAGING_DIR}/ldap"
 install -d -m 0755 "${STAGING_DIR}/files"
 install -d -m 0755 "${STAGING_DIR}/meta"
 
-slapcat -n 0 -l "${STAGING_DIR}/ldap/config.ldif"
-slapcat -n 1 -l "${STAGING_DIR}/ldap/data.ldif"
+"${SLAPCAT_BIN}" -n 0 -l "${STAGING_DIR}/ldap/config.ldif"
+"${SLAPCAT_BIN}" -n 1 -l "${STAGING_DIR}/ldap/data.ldif"
 
 copy_into_bundle "/etc/lxc-reverse-proxy-ldap" "${STAGING_DIR}/files"
 copy_into_bundle "/etc/nginx/conf.d" "${STAGING_DIR}/files"
