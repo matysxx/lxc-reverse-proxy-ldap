@@ -41,6 +41,7 @@ Wynik:
 
 - archiwum `backup-<hostname>-<timestamp>.tar.gz`
 - automatyczne usunięcie najstarszych archiwów ponad `BACKUP_KEEP_COUNT`
+- czytelne logi startu, końca i rotacji na standardowym wyjściu
 
 ## Restore
 
@@ -52,6 +53,12 @@ Przykład:
 
 ```bash
 sudo ./scripts/restore-host.sh /var/backups/lxc-reverse-proxy-ldap/backup-ldap01-20260410T120000Z.tar.gz --force
+```
+
+Weryfikacja archiwum bez zmian w systemie:
+
+```bash
+sudo ./scripts/restore-host.sh /var/backups/lxc-reverse-proxy-ldap/backup-ldap01-20260410T120000Z.tar.gz --verify-only
 ```
 
 Restore wykonuje:
@@ -66,7 +73,8 @@ Restore wykonuje:
 
 - restore jest operacją destrukcyjną dla bieżącej bazy LDAP
 - przed użyciem upewnij się, że wskazujesz właściwe archiwum
-- skrypt wymaga `--force`, żeby ograniczyć przypadkowe użycie
+- skrypt wymaga `--force`, żeby wykonać właściwy restore
+- `--verify-only` pozwala sprawdzić strukturę archiwum bez zmian w systemie
 
 ## Harmonogram
 

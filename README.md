@@ -26,7 +26,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `scripts/bootstrap-host.sh` - instalacja pakietów i pierwsza konfiguracja
 - `scripts/check-env.sh` - walidacja lokalnej konfiguracji
 - `scripts/backup-host.sh` - backup rotacyjny LDAP i host-local config
-- `scripts/restore-host.sh` - przywracanie z archiwum backupu
+- `scripts/restore-host.sh` - przywracanie lub weryfikacja archiwum backupu
 - `scripts/setup-logging.sh` - katalogi logów i konfiguracja logrotate
 - `scripts/apply-nginx-vhost-logging.sh` - per-vhost logi `nginx`
 - `scripts/render-config.sh` - renderowanie plików z szablonów
