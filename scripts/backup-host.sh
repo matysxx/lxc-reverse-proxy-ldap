@@ -94,7 +94,7 @@ if (( ${#archives[@]} > BACKUP_KEEP_COUNT )); then
 fi
 
 current_count=$(find "${BACKUP_ROOT}" -maxdepth 1 -type f -name 'backup-*.tar.gz' | wc -l | tr -d ' ')
-archive_size=$(du -h "${BACKUP_ROOT}/${ARCHIVE_NAME}" | awk '{print $1}')
-log "Backup created: ${BACKUP_ROOT}/${ARCHIVE_NAME} (${archive_size})"
+archive_size_bytes=$(stat -c '%s' "${BACKUP_ROOT}/${ARCHIVE_NAME}")
+log "Backup created: ${BACKUP_ROOT}/${ARCHIVE_NAME} (${archive_size_bytes} bytes)"
 log "Stored backups after rotation: ${current_count}"
 log "Backup finished successfully"
