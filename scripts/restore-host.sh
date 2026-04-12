@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Run this script as root." >&2
   exit 1
@@ -11,6 +13,7 @@ usage() {
   cat <<'EOF'
 Usage:
   ./scripts/restore-host.sh /path/to/backup.tar.gz --force
+  ./scripts/restore-host.sh /path/to/backup.tar.gz --verify-only
 
 This operation restores LDAP configuration/data and host-local service
 configuration from a backup created by backup-host.sh.
@@ -23,18 +26,22 @@ if [[ $# -lt 2 ]]; then
 fi
 
 ARCHIVE_PATH="$1"
-FORCE_FLAG="$2"
+MODE_FLAG="$2"
 
 if [[ ! -f "${ARCHIVE_PATH}" ]]; then
   echo "Backup archive not found: ${ARCHIVE_PATH}" >&2
   exit 1
 fi
 
-if [[ "${FORCE_FLAG}" != "--force" ]]; then
-  echo "Refusing restore without --force." >&2
+if [[ "${MODE_FLAG}" != "--force" && "${MODE_FLAG}" != "--verify-only" ]]; then
+  echo "Unsupported mode: ${MODE_FLAG}" >&2
   usage >&2
   exit 1
 fi
+
+log() {
+  printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
+}
 
 # shellcheck source=./common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
@@ -53,6 +60,28 @@ extract_path="$(mktemp -d)"
 trap 'rm -rf "${WORKDIR}" "${extract_path}"' EXIT
 
 tar -C "${extract_path}" -xzf "${ARCHIVE_PATH}"
+
+required_paths=(
+  "${extract_path}/ldap/config.ldif"
+  "${extract_path}/ldap/data.ldif"
+  "${extract_path}/files/etc/lxc-reverse-proxy-ldap"
+  "${extract_path}/files/etc/nginx/conf.d"
+  "${extract_path}/meta/backup.env"
+)
+
+for required_path in "${required_paths[@]}"; do
+  if [[ ! -e "${required_path}" ]]; then
+    echo "Backup archive is missing required path: ${required_path#${extract_path}/}" >&2
+    exit 1
+  fi
+done
+
+log "Backup archive structure verified: ${ARCHIVE_PATH}"
+
+if [[ "${MODE_FLAG}" == "--verify-only" ]]; then
+  log "Verification finished successfully"
+  exit 0
+fi
 
 install -d -m 0755 "${ROLLBACK_ROOT}"
 tar -czf "${ROLLBACK_ARCHIVE}" \
@@ -106,5 +135,5 @@ if systemctl list-unit-files apache2.service >/dev/null 2>&1; then
 fi
 systemctl start nginx
 
-echo "Restore finished."
-echo "Rollback snapshot: ${ROLLBACK_ARCHIVE}"
+log "Restore finished successfully"
+log "Rollback snapshot: ${ROLLBACK_ARCHIVE}"

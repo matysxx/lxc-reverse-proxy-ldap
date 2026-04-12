@@ -36,6 +36,10 @@ cleanup() {
 }
 trap cleanup EXIT
 
+log() {
+  printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
+}
+
 copy_into_bundle() {
   local src="$1"
   local dest_root="$2"
@@ -50,6 +54,9 @@ install -d -m 0755 "${BACKUP_ROOT}"
 install -d -m 0755 "${STAGING_DIR}/ldap"
 install -d -m 0755 "${STAGING_DIR}/files"
 install -d -m 0755 "${STAGING_DIR}/meta"
+
+log "Starting backup for ${HOSTNAME_SHORT}"
+log "Using slapcat at ${SLAPCAT_BIN}"
 
 "${SLAPCAT_BIN}" -n 0 -l "${STAGING_DIR}/ldap/config.ldif"
 "${SLAPCAT_BIN}" -n 1 -l "${STAGING_DIR}/ldap/data.ldif"
@@ -79,9 +86,15 @@ tar -C "${STAGING_DIR}" -czf "${BACKUP_ROOT}/${ARCHIVE_NAME}" .
 mapfile -t archives < <(find "${BACKUP_ROOT}" -maxdepth 1 -type f -name 'backup-*.tar.gz' | sort)
 if (( ${#archives[@]} > BACKUP_KEEP_COUNT )); then
   remove_count=$(( ${#archives[@]} - BACKUP_KEEP_COUNT ))
+  log "Applying rotation: removing ${remove_count} old backup(s)"
   for archive in "${archives[@]:0:${remove_count}}"; do
+    log "Removing ${archive}"
     rm -f "${archive}"
   done
 fi
 
-echo "Backup created: ${BACKUP_ROOT}/${ARCHIVE_NAME}"
+current_count=$(find "${BACKUP_ROOT}" -maxdepth 1 -type f -name 'backup-*.tar.gz' | wc -l | tr -d ' ')
+archive_size=$(du -h "${BACKUP_ROOT}/${ARCHIVE_NAME}" | awk '{print $1}')
+log "Backup created: ${BACKUP_ROOT}/${ARCHIVE_NAME} (${archive_size})"
+log "Stored backups after rotation: ${current_count}"
+log "Backup finished successfully"

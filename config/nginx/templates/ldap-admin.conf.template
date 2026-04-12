@@ -12,7 +12,8 @@ server {
 }
 
 server {
-  listen ${PROXY_HTTPS_PORT} ssl http2;
+  listen ${PROXY_HTTPS_PORT} ssl;
+  http2 on;
   server_name ${LDAP_PHPLDAPADMIN_HOSTNAME};
 
   ssl_certificate ${SSL_CERT_FILE};
