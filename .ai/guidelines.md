@@ -28,7 +28,9 @@ Read these files first:
 
 ## Notes
 
-- This repository does not vendor portable `.ai/roles`, `.ai/flows`, or
-  `.ai/meta` content.
-- Global agent bootstrap may still exist in the parent workspace, but this file
-  is the repository-local source of truth for project context.
+- This repository vendors both repository-local project context and portable AI
+  workflow content under `.ai/`.
+- `.ai/guidelines.md` and `.ai/project/*.md` are the repository-local source of
+  truth for project context.
+- Global agent bootstrap may still exist in the parent workspace, but it should
+  not override repository-specific facts.
