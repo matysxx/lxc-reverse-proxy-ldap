@@ -24,6 +24,8 @@ required_vars=(
   LDAP_PHPLDAPADMIN_ENABLED
   LDAP_USERS_OU
   LDAP_GROUPS_OU
+  LDAP_LDAPS_ENABLED
+  LDAP_LDAPS_PORT
   PROXY_HTTP_PORT
   PROXY_HTTPS_PORT
 )
@@ -43,6 +45,27 @@ fi
 if [[ ! -f "${TLS_KEY_SOURCE}" ]]; then
   echo "Missing TLS private key: ${TLS_KEY_SOURCE}" >&2
   exit 1
+fi
+
+if [[ "${LDAP_LDAPS_ENABLED}" == "true" ]]; then
+  ldap_tls_cert_file="${LDAP_TLS_CERT_FILE:-${LDAP_TLS_CERT_SOURCE_DEFAULT}}"
+  ldap_tls_key_file="${LDAP_TLS_KEY_FILE:-${LDAP_TLS_KEY_SOURCE_DEFAULT}}"
+  ldap_tls_ca_file="${LDAP_TLS_CA_FILE:-}"
+
+  if [[ ! -f "${ldap_tls_cert_file}" ]]; then
+    echo "Missing LDAP TLS certificate: ${ldap_tls_cert_file}" >&2
+    exit 1
+  fi
+
+  if [[ ! -f "${ldap_tls_key_file}" ]]; then
+    echo "Missing LDAP TLS private key: ${ldap_tls_key_file}" >&2
+    exit 1
+  fi
+
+  if [[ -n "${ldap_tls_ca_file}" ]] && [[ ! -f "${ldap_tls_ca_file}" ]]; then
+    echo "Missing LDAP TLS CA file: ${ldap_tls_ca_file}" >&2
+    exit 1
+  fi
 fi
 
 echo "Environment validation passed."

@@ -25,6 +25,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `.env.dist` - przykładowe zmienne środowiskowe
 - `scripts/bootstrap-host.sh` - instalacja pakietów i pierwsza konfiguracja
 - `scripts/check-env.sh` - walidacja lokalnej konfiguracji
+- `scripts/setup-ldap-tls.sh` - wdrożenie certyfikatu LDAP dla `LDAPS`
 - `scripts/backup-host.sh` - backup rotacyjny LDAP i host-local config
 - `scripts/restore-host.sh` - przywracanie lub weryfikacja archiwum backupu
 - `scripts/setup-logging.sh` - katalogi logów i konfiguracja logrotate
@@ -37,6 +38,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `config/logrotate/` - szablon rotacji logów usług
 - `docs/` - opis architektury, wdrożenia i integracji
 - `docs/backup.md` - procedura backupu i odtwarzania
+- `docs/ldaps.md` - procedura wdrożenia i testu `LDAPS`
 - `docs/logging.md` - logi usług i rotacja logów
 - `proxmox/` - notatki dla LXC w Proxmox
 - `templates/service-index/` - szablon statycznej strony startowej usług
@@ -71,19 +73,21 @@ Poza tym LXC:
 
 2. Uzupełnij `/etc/lxc-reverse-proxy-ldap/env`.
 3. Dodaj certyfikat do `/etc/lxc-reverse-proxy-ldap/ssl/`.
-4. Na świeżym Debianie 13 uruchom:
+4. Jeżeli chcesz wystawić `LDAPS`, dodaj też ustawienia `LDAP_LDAPS_ENABLED`,
+   `LDAP_LDAPS_PORT`, `LDAP_TLS_CERT_FILE` i `LDAP_TLS_KEY_FILE` w pliku env.
+5. Na świeżym Debianie 13 uruchom:
 
    ```bash
    sudo ./scripts/bootstrap-host.sh
    ```
 
-5. Uruchom lub przeładuj usługi:
+6. Uruchom lub przeładuj usługi:
 
    ```bash
    sudo ./scripts/start.sh
    ```
 
-6. Zweryfikuj:
+7. Zweryfikuj:
 
    ```bash
    systemctl status slapd nginx
@@ -169,12 +173,23 @@ Najważniejsze zmienne:
 - `LDAP_HOSTNAME`
 - `LDAP_PHPLDAPADMIN_HOSTNAME`
 - `LDAP_PHPLDAPADMIN_ENABLED`
+- `LDAP_LDAPS_ENABLED`
+- `LDAP_LDAPS_PORT`
+- `LDAP_TLS_CERT_FILE`
+- `LDAP_TLS_KEY_FILE`
+- `LDAP_TLS_CA_FILE`
 - `PROXY_HTTP_PORT`
 - `PROXY_HTTPS_PORT`
 
 W modelu host-local plik powinien leżeć jako:
 
 - `/etc/lxc-reverse-proxy-ldap/env`
+
+Jeżeli `LDAP_LDAPS_ENABLED=true`, repo nie powinno przechowywać aktywnego
+materiału klucza. Docelowy certyfikat i klucz nadal trzymaj wyłącznie w:
+
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.crt`
+- `/etc/lxc-reverse-proxy-ldap/ssl/tls.key`
 
 ## Przykładowe wpisy LDAP
 

@@ -1,7 +1,7 @@
 .DS_Store
 .env
-config/nginx/ssl/tls.crt
-config/nginx/ssl/tls.key
+config/nginx/ssl/*
+!config/nginx/ssl/.gitkeep
 runtime/*
 !runtime/.gitkeep
 !runtime/certs/
@@ -9,3 +9,5 @@ runtime/certs/*
 !runtime/certs/.gitkeep
 config/ldap/examples/core-groups.vitrobud.ldif
 config/ldap/examples/piotrmatysek.vitrobud.ldif
+config/ldap/examples/*.local.ldif
+config/ldap/examples/*.private.ldif

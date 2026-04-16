@@ -39,7 +39,12 @@ Ustaw w `/etc/lxc-reverse-proxy-ldap/env`:
 - hostname dla `phpLDAPadmin`
 - porty HTTP i HTTPS
 - flagę `LDAP_PHPLDAPADMIN_ENABLED`
+- flagę `LDAP_LDAPS_ENABLED`
+- port `LDAP_LDAPS_PORT`
 - opcjonalnie:
+  - `LDAP_TLS_CERT_FILE`
+  - `LDAP_TLS_KEY_FILE`
+  - `LDAP_TLS_CA_FILE`
   - `BACKUP_ROOT`
   - `BACKUP_KEEP_COUNT`
 
@@ -55,6 +60,16 @@ cp /ścieżka/do/tls.key /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 chmod 600 /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 ```
 
+Jeżeli włączasz `LDAPS`, użyj tych samych host-local plików w env:
+
+```bash
+LDAP_LDAPS_ENABLED=true
+LDAP_LDAPS_PORT=636
+LDAP_TLS_CERT_FILE=/etc/lxc-reverse-proxy-ldap/ssl/tls.crt
+LDAP_TLS_KEY_FILE=/etc/lxc-reverse-proxy-ldap/ssl/tls.key
+LDAP_TLS_CA_FILE=
+```
+
 Jeżeli potrzebujesz krótkiego miejsca roboczego na pliki wyeksportowane np. z
 MikroTika, użyj `runtime/certs/` w repo tylko jako staging area. Docelowe pliki
 używane przez `nginx` muszą zostać przeniesione poza repo do
@@ -67,12 +82,21 @@ sudo ./scripts/bootstrap-host.sh
 sudo ./scripts/start.sh
 ```
 
+Jeżeli certyfikat podmieniasz już po bootstrapie, odśwież konfigurację `LDAPS`
+bez pełnego reinstallowania hosta:
+
+```bash
+sudo ./scripts/setup-ldap-tls.sh
+sudo systemctl restart slapd
+```
+
 ## 6. Weryfikacja
 
 ```bash
 systemctl status slapd nginx
 . /etc/lxc-reverse-proxy-ldap/env
 ldapsearch -x -D "$LDAP_ADMIN_DN" -W -b "$LDAP_BASE_DN"
+openssl s_client -connect "${LDAP_HOSTNAME}:${LDAP_LDAPS_PORT}" -servername "${LDAP_HOSTNAME}" </dev/null
 ```
 
 Lokalne vhosty i reverse proxy dla usług klienta powinny być utrzymywane poza
@@ -103,16 +127,16 @@ Przed importem dostosuj:
 Przykład:
 
 ```bash
-ldapadd -x -D "cn=admin,dc=home,dc=arpa" -W -f config/ldap/examples/users.sample.ldif
-ldapadd -x -D "cn=admin,dc=home,dc=arpa" -W -f config/ldap/examples/groups.sample.ldif
+ldapadd -x -D "cn=admin,dc=<twoja>,dc=<domena>" -W -f config/ldap/examples/users.sample.ldif
+ldapadd -x -D "cn=admin,dc=<twoja>,dc=<domena>" -W -f config/ldap/examples/groups.sample.ldif
 ```
 
 ## 8. DNS
 
 Dodaj rekordy DNS wskazujące na adres LXC:
 
-- `ldap.home.arpa`
-- `ldapadmin.home.arpa`
+- `ldap.<twoja-domena>`
+- `ldapadmin.<twoja-domena>`
 
 ## 9. Następne rozszerzenia
 

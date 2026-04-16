@@ -15,3 +15,6 @@ else
   TLS_CERT_SOURCE="${ROOT_DIR}/config/nginx/ssl/tls.crt"
   TLS_KEY_SOURCE="${ROOT_DIR}/config/nginx/ssl/tls.key"
 fi
+
+LDAP_TLS_CERT_SOURCE_DEFAULT="${TLS_CERT_SOURCE}"
+LDAP_TLS_KEY_SOURCE_DEFAULT="${TLS_KEY_SOURCE}"

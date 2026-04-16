@@ -61,12 +61,22 @@ install -d -m 0755 "${HOST_CONFIG_DIR}/ssl"
 "${ROOT_DIR}/scripts/setup-logging.sh"
 "${ROOT_DIR}/scripts/render-config.sh"
 
+slapd_services='ldap:/// ldapi:///'
+if [[ "${LDAP_LDAPS_ENABLED:-false}" == "true" ]]; then
+  slapd_services='ldap:/// ldapi:/// ldaps:///'
+fi
+
 if [[ -f /etc/default/slapd ]]; then
-  sed -i "s|^SLAPD_SERVICES=.*|SLAPD_SERVICES=\"ldap:/// ldapi:///\"|" /etc/default/slapd
+  sed -i "s|^SLAPD_SERVICES=.*|SLAPD_SERVICES=\"${slapd_services}\"|" /etc/default/slapd
 fi
 
 systemctl enable slapd nginx
 systemctl restart slapd
+
+if [[ "${LDAP_LDAPS_ENABLED:-false}" == "true" ]]; then
+  "${ROOT_DIR}/scripts/setup-ldap-tls.sh"
+  systemctl restart slapd
+fi
 
 if ! ldapsearch -x -D "${LDAP_ADMIN_DN}" -w "${LDAP_ADMIN_PASSWORD}" -b "${LDAP_USERS_OU},${LDAP_BASE_DN}" -s base dn >/dev/null 2>&1; then
   if ! ldapadd -x -D "${LDAP_ADMIN_DN}" -w "${LDAP_ADMIN_PASSWORD}" -f "${ROOT_DIR}/runtime/base.ldif"; then
