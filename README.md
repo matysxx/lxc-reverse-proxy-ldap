@@ -109,6 +109,11 @@ Docelowy układ na hoście:
 - `/var/log/nginx/services/` - per-vhost access/error logi `nginx`
 - `/var/log/lxc-reverse-proxy-ldap-backup.log` - log backupów
 
+Pliki z sekretami operatorskimi powinny mieć restrykcyjne uprawnienia:
+
+- `/etc/lxc-reverse-proxy-ldap/env` - `0600`
+- `/root/lxc-reverse-proxy-ldap.secrets` - `0600`
+
 Repo w `/opt/lxc-reverse-proxy-ldap` ma pozostać czyste gitowo i zawierać tylko:
 
 - skrypty

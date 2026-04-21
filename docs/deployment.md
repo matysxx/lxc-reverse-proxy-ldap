@@ -60,6 +60,13 @@ cp /ścieżka/do/tls.key /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 chmod 600 /etc/lxc-reverse-proxy-ldap/ssl/tls.key
 ```
 
+Utwardź też pliki z sekretami i konfiguracją:
+
+```bash
+chmod 600 /etc/lxc-reverse-proxy-ldap/env
+chmod 600 /root/lxc-reverse-proxy-ldap.secrets
+```
+
 Jeżeli włączasz `LDAPS`, użyj tych samych host-local plików w env:
 
 ```bash
