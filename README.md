@@ -38,10 +38,11 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `config/logrotate/` - szablon rotacji logów usług
 - `docs/` - opis architektury, wdrożenia i integracji
 - `docs/backup.md` - procedura backupu i odtwarzania
+- `docs/failover.md` - warianty redundancji i failover dla LDAP i reverse proxy
 - `docs/ldaps.md` - procedura wdrożenia i testu `LDAPS`
 - `docs/logging.md` - logi usług i rotacja logów
 - `proxmox/` - notatki dla LXC w Proxmox
-- `templates/service-index/` - szablon statycznej strony startowej usług
+- `templates/service-index/` - szablony statycznych stron startowych usług
 - `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
 - `.ai/` - repo-scoped workflow i kontekst projektu dla agentów
 - `.codex/AGENTS.md` - repo-scoped entrypoint dla narzędzi Codex
@@ -135,6 +136,7 @@ Aktywne certyfikaty używane przez `nginx` nadal powinny leżeć wyłącznie w:
 Szablon portalu usług znajduje się w:
 
 - `templates/service-index/index.html`
+- `templates/service-index/user-portal.html`
 
 Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
 
