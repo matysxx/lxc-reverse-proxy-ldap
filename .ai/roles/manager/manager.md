@@ -9,6 +9,13 @@ Entry point for the manager role. Coordinates task lifecycle, commit discipline,
 - `project/context.md` — project key, issue tracker type, repository host, commit format, MCP availability
 - `project/tech-spec.md` — QA tools, test runner
 
+## Before Starting
+
+1. Read project context (`project/context.md`) and tech spec (`project/tech-spec.md`)
+2. Read the task wiki summary (`wiki/tasks/{PROJECT_KEY}-{N}/summary.md`) if it exists
+3. Read the latest handoff (`wiki/tasks/{PROJECT_KEY}-{N}/handoff.md`) if it exists
+4. Read the heartbeat (`wiki/tasks/{PROJECT_KEY}-{N}/heartbeat.md`) if it exists
+
 ## Procedures
 
 | File | When to use |
@@ -57,6 +64,18 @@ Task statuses are tracked in `prd/task-status.local.md` (gitignored, local only)
 - `In Progress` — branch and requirements exist
 - `Done` — commit created, acceptance criteria fulfilled
 - Scope change — record in the task's requirements document
+
+## Task Wiki Handoff
+
+When creating, updating, or closing a task, update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+- Current task status and branch
+- Commit, PR, or ticket links
+- QA status and remaining risks
+- Final handoff or closure note
+- Heartbeat status for the next action or closure
+- Reflection if the task is being closed or handed off
+
+Keep `wiki/tasks/` local-only. Do not commit task wiki entries.
 
 ## Files in this Directory
 

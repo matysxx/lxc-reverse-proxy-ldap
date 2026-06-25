@@ -47,9 +47,11 @@ Read these files before proceeding:
 ### Step 3: Check Task Context (if applicable)
 
 If the bug is tied to an existing task:
-1. Read `prd/{TASK}/requirements.md` — understand original requirements
-2. If `prd/{TASK}/implementation-plan.md` exists — review planned behavior
-3. Check if the bug is a regression or a gap in the original implementation
+1. Read `wiki/tasks/{TASK}/summary.md` if it exists — use it as the concise current state
+2. Read `wiki/tasks/{TASK}/heartbeat.md` if it exists — use it for blockers and current owner
+3. Read `prd/{TASK}/requirements.md` — understand original requirements
+4. If `prd/{TASK}/implementation-plan.md` exists — review planned behavior
+5. Check if the bug is a regression or a gap in the original implementation
 
 **Output:** Context about expected vs actual behavior
 
@@ -65,6 +67,7 @@ If the bug is tied to an existing task:
    - Identify root cause
    - Propose solution
 3. Document findings as you go
+4. Update observations, heartbeat, investigation status, evidence links, and handoff notes
 
 **Output:** Root cause identified, solution proposed
 
@@ -90,6 +93,7 @@ If the bug is tied to an existing task:
 3. Follow code quality rules from `roles/coder/code-quality.md`
 4. Follow testing rules from `roles/coder/testing-rules.md`
 5. Add tests to prevent regression (if applicable)
+6. Update observations, heartbeat, changed files, validation status, and Manager handoff
 
 **Output:** Fix implemented, code ready for commit
 
@@ -105,6 +109,7 @@ If the bug is tied to an existing task:
 4. Close task — follow `roles/manager/close-task.md`
 5. If PR needed — follow `roles/manager/pr-description.md`
 6. If ticket update needed — follow `roles/manager/update-ticket.md`
+7. Reflect observations when needed, then update final status, commit/PR links, heartbeat, and any follow-up risks
 
 **Output:** Changes committed, task closed, documentation complete
 
@@ -169,6 +174,7 @@ If bug is discovered while working on another task:
 ## Artifacts
 
 - `{TASK}/investigation-report.md` — investigation findings and root cause analysis
+- `wiki/tasks/{TASK}/` — local-only investigation summary and handoff notes
 - Git commit(s) — fix implementation committed (if applicable)
 - Task entry in `prd/prd.md` (if task created)
 - Pull request (optional) — if specified in `project/context.md`

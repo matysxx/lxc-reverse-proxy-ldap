@@ -11,3 +11,4 @@ config/ldap/examples/core-groups.vitrobud.ldif
 config/ldap/examples/piotrmatysek.vitrobud.ldif
 config/ldap/examples/*.local.ldif
 config/ldap/examples/*.private.ldif
+.ai/wiki/tasks/

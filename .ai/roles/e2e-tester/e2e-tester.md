@@ -62,17 +62,34 @@ E2E test creation follows a **two-session workflow** to keep planning and execut
 
 **Session 1 (Planning):**
 1. Read project context and tech spec
-2. Phase 0: Understand the task — read requirements, define success criteria
-3. Phase 1: Analyze page — use MCP Playwright to navigate, snapshot, map elements, identify missing `data-testid`
-4. Phase 2: Analyze codebase — check existing page objects, components, test data
-5. Phase 3: Create test plan — write test cases, create `implementation-plan.md`
-6. Get user approval on the plan
+2. Read the task wiki summary (`wiki/tasks/{PROJECT_KEY}-{N}/summary.md`) if it exists
+3. Phase 0: Understand the task — read requirements, define success criteria
+4. Phase 1: Analyze page — use MCP Playwright to navigate, snapshot, map elements, identify missing `data-testid`
+5. Phase 2: Analyze codebase — check existing page objects, components, test data
+6. Phase 3: Create test plan — write test cases, create `implementation-plan.md`
+7. Get user approval on the plan
+8. Update the task wiki with test planning decisions and handoff notes
 
 **Session 2 (Execution):**
-7. Read `implementation-plan.md`
-8. Phase 4: Implement — Commit 1 (templates), Commit 2 (components, POM, test data, specs)
-9. Phase 5: Validate — run tests, verify quality gates
-10. Hand off to Manager role for commit/PR workflow
+9. Read `implementation-plan.md`
+10. Read the latest task wiki handoff if it exists
+11. Phase 4: Implement — Commit 1 (templates), Commit 2 (components, POM, test data, specs)
+12. Phase 5: Validate — run tests, verify quality gates
+13. Update the task wiki with changed files, validation results, gaps, and Manager handoff
+14. Hand off to Manager role for commit/PR workflow
+
+## Task Wiki Handoff
+
+After each session, update `wiki/tasks/{PROJECT_KEY}-{N}/` with concise testing context:
+- Planned or implemented test coverage
+- Required `data-testid` changes
+- Page objects, fixtures, or specs touched
+- Validation status and known gaps
+- Next role or follow-up action
+- Current heartbeat status and blockers
+- Reflected conclusions when test observations grow
+
+Do not store raw screenshots, videos, traces, credentials, or long logs in the wiki. Link to local artifacts only when needed.
 
 ## Files in this Directory
 

@@ -20,12 +20,27 @@ Entry point for the designer role. Guides requirements gathering, solution desig
 ## Workflow
 
 1. Read project context (`project/context.md`) and tech spec (`project/tech-spec.md`)
-2. Gather information about the task from the user, ticket, or brief
-3. Create requirements document — follow `create-requirements.md`
-4. Get user approval on requirements
-5. Create implementation plan — follow `create-implementation-plan.md`
-6. Get user approval on implementation plan
-7. Hand off to Coder role
+2. Read the task wiki summary (`wiki/tasks/{PROJECT_KEY}-{N}/summary.md`) if it exists
+3. Gather information about the task from the user, ticket, or brief
+4. Create requirements document — follow `create-requirements.md`
+5. Get user approval on requirements
+6. Create implementation plan — follow `create-implementation-plan.md`
+7. Get user approval on implementation plan
+8. Update the task wiki with decisions, artifact links, open questions, and the Coder handoff
+9. Hand off to Coder role
+
+## Task Wiki Handoff
+
+After finishing, update `wiki/tasks/{PROJECT_KEY}-{N}/`:
+- `summary.md` — current state, approved scope, and next role
+- `decisions.md` — durable design decisions and rationale
+- `artifacts.md` — links to requirements, implementation plan, ADRs, or related files
+- `handoff.md` — concise instructions for the Coder role
+- `observations.md` — important design events and open questions
+- `heartbeat.md` — current checkpoint, blocker, and next owner
+- `reflection.md` — compressed design conclusions when observations grow
+
+Keep the wiki local-only, concise, and free of secrets or unnecessary transcripts.
 
 ## Files in this Directory
 

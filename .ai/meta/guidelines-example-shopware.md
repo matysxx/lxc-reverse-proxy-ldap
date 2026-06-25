@@ -9,6 +9,12 @@ Read these files to understand the project:
 1. `project/context.md` — project identity, workflow tools, task management
 2. `project/tech-spec.md` — technology stack, QA tools, project structure
 
+If the task ID is known, read local task wiki context before role-specific files:
+
+3. `wiki/tasks/{TASK_KEY}/summary.md` — concise current task state, if it exists
+4. `wiki/tasks/{TASK_KEY}/handoff.md` — latest handoff notes, if they exist
+5. `wiki/tasks/{TASK_KEY}/heartbeat.md` — current checkpoint, blockers, and next action, if it exists
+
 ## Role Selection
 
 Determine the task type and read the corresponding role index:
@@ -42,10 +48,14 @@ When starting a new task from scratch:
 
 When continuing work on an existing task:
 
-1. Read the task requirements: `prd/{TASK_KEY}/requirements.md`
-2. Read `roles/coder/coder.md` and referenced files
-3. If the task has an implementation plan, follow it
-4. After completion, follow commit and close-task procedures
+1. Read local task wiki context: `wiki/tasks/{TASK_KEY}/summary.md`, if it exists
+2. Read local heartbeat context: `wiki/tasks/{TASK_KEY}/heartbeat.md`, if it exists
+3. Read the task requirements: `prd/{TASK_KEY}/requirements.md`
+4. Read `roles/coder/coder.md` and referenced files
+5. If the task has an implementation plan, follow it
+6. After completion, append observations, update heartbeat, and write a concise handoff
+7. Reflect observations into `summary.md` when a phase completes or context grows too large
+8. Follow commit and close-task procedures
 
 ## Environment Access
 
@@ -57,5 +67,6 @@ When debugging or verifying deployments, read:
 
 - **Do not modify portable files** in `roles/` or `meta/` — they are shared across projects.
 - **Project-specific content** goes in `project/` and `prd/` only.
+- **Task wiki entries** in `wiki/tasks/` are local operational memory and must not be committed.
 - **Always ask before** making assumptions that could change scope.
 - **Follow the tech-spec** — use the project's tools, not your defaults.

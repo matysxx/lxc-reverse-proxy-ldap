@@ -26,6 +26,8 @@ Verify these directories exist:
 [ ] .ai/roles/designer/
 [ ] .ai/roles/manager/
 [ ] .ai/prd/
+[ ] .ai/wiki/
+[ ] .ai/wiki/tasks/
 [ ] .ai/meta/
 ```
 
@@ -77,6 +79,16 @@ Verify these files exist and are non-empty:
 ```
 [ ] .ai/prd/prd.md
 [ ] .ai/prd/task-status.local.md
+```
+
+**Wiki:**
+```
+[ ] .ai/wiki/README.md
+[ ] .ai/wiki/context-policy.md
+[ ] .ai/wiki/task-summary-template.md
+[ ] .ai/wiki/observations-template.md
+[ ] .ai/wiki/reflection-template.md
+[ ] .ai/wiki/heartbeat-template.md
 ```
 
 **Meta:**
@@ -166,6 +178,7 @@ Verify `.gitignore` contains rules for AI instruction files:
 [ ] .ai/prd/* is ignored
 [ ] .ai/prd/prd.md is excluded from ignore (committed)
 [ ] task-status.local.md is effectively ignored (covered by prd/* or explicit rule)
+[ ] .ai/wiki/tasks/ is ignored
 ```
 
 ### 10. PRD Consistency
@@ -175,6 +188,18 @@ Verify `.gitignore` contains rules for AI instruction files:
 [ ] prd/task-status.local.md has entries for all tasks in prd.md
 [ ] No orphan task directories (directory exists but not in index)
 [ ] No phantom tasks (in index but directory missing)
+```
+
+### 11. Task Wiki Hygiene
+
+```
+[ ] wiki/tasks/ exists for local agent handoff context
+[ ] For active tasks, wiki/tasks/{PROJECT_KEY}-{N}/summary.md exists when cross-role handoff has occurred
+[ ] For active tasks, heartbeat.md is current when blockers, dependencies, or ownership changed
+[ ] Observations have been reflected when observations.md or summary.md grew beyond policy limits
+[ ] Task wiki entries are concise and link to artifacts instead of duplicating long content
+[ ] No secrets, credentials, raw production data, or long chat transcripts are stored in wiki/tasks/
+[ ] wiki/tasks/ is local-only and not staged for commit
 ```
 
 ---

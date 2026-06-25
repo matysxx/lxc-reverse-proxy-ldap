@@ -12,8 +12,11 @@ Entry point for the coder role. Guides implementation work — coding standards,
 ## Before Starting
 
 1. Read the task's `requirements.md`
-2. Read `project/tech-spec.md` for the technology stack
-3. Check existing code in the area of changes — follow established patterns
+2. Read the task wiki summary (`wiki/tasks/{PROJECT_KEY}-{N}/summary.md`) if it exists
+3. Read the latest handoff (`wiki/tasks/{PROJECT_KEY}-{N}/handoff.md`) if it exists
+4. Read the heartbeat (`wiki/tasks/{PROJECT_KEY}-{N}/heartbeat.md`) if it exists
+5. Read `project/tech-spec.md` for the technology stack
+6. Check existing code in the area of changes — follow established patterns
 
 ## General Rules
 
@@ -31,6 +34,23 @@ Entry point for the coder role. Guides implementation work — coding standards,
 | `testing-rules.md` | Rules for writing tests (unit, integration, E2E) |
 
 > For comprehensive E2E testing methodology, see `e2e-tester/e2e-tester.md` (if the E2E tester role is configured).
+
+## After Finishing
+
+Update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+- What was implemented and which files changed
+- Key implementation decisions and tradeoffs
+- Tests added or run, with concise results
+- Known gaps, blockers, or follow-up tasks
+- The next recommended role or handoff target
+
+Use the context policy in `wiki/context-policy.md`:
+- Append important events to `observations.md`
+- Update `heartbeat.md` with status, blockers, and next action
+- Update `handoff.md` before switching roles or stopping
+- Reflect observations into `summary.md` when a meaningful implementation phase is complete
+
+Keep the wiki local-only, concise, and free of secrets, raw logs, full diffs, or unnecessary chat history.
 
 ## Files in this Directory
 

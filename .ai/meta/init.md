@@ -63,6 +63,14 @@ Create the complete `.ai/` structure from scratch.
 ├── prd/
 │   ├── prd.md
 │   └── task-status.local.md
+├── wiki/
+│   ├── README.md
+│   ├── context-policy.md
+│   ├── task-summary-template.md
+│   ├── observations-template.md
+│   ├── reflection-template.md
+│   ├── heartbeat-template.md
+│   └── tasks/
 └── meta/
     ├── meta.md
     ├── init.md
@@ -80,6 +88,7 @@ Copy these directories **as-is** from the reference structure (they are project-
 
 - `roles/` — all role directories and files
 - `meta/` — all files
+- `wiki/` — local task context policy, templates, and documentation
 - `guidelines.md` — use an appropriate example as starting point (e.g., `meta/guidelines-example-shopware.md`), then customize for the project
 
 #### 2.3 Set up agent entry points
@@ -111,9 +120,13 @@ Add these rules to the project's `.gitignore` (check if they already exist first
 # AI agent instructions — local-only files
 .ai/prd/*
 !.ai/prd/prd.md
+
+# AI task context wiki — local-only files
+.ai/wiki/tasks/
 ```
 
 > This ensures task directories (requirements, plans) stay local, while the task index is committed. The `task-status.local.md` is covered by the `prd/*` wildcard.
+> This also ensures task wiki entries stay local and cannot be committed accidentally.
 
 #### 2.5 Run Discovery
 
@@ -128,6 +141,7 @@ Based on discovery results, generate:
 - `project/environments.md` — from discovery answers (environments, access, logs, services)
 - `prd/prd.md` — empty task index with correct `{PROJECT_KEY}`
 - `prd/task-status.local.md` — empty status file
+- `wiki/tasks/` — empty local-only task wiki directory; task files are created from wiki templates when a task starts
 
 #### 2.7 Verify
 
@@ -152,6 +166,7 @@ The `.ai/` structure already exists. Run the audit to find gaps.
 - Agent entry point files (`.claude/CLAUDE.md`, `.codex/AGENTS.md`, `.junie/guidelines.md`) are created in step 2.3. If they already exist with different content, ask the user before overwriting.
 - Portable files (`roles/`, `meta/`) must not contain project-specific content. If they do after init, something went wrong.
 - `project/` and `prd/` are project-specific and generated per-project.
+- `wiki/tasks/` is local operational memory. Never commit task-specific wiki entries.
 
 ## Artifacts
 

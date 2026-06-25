@@ -38,11 +38,14 @@ Read these files before proceeding:
 
 ### Step 3: Read Task Context
 
-1. Read `prd/{TASK}/requirements.md` — understand what needs to be built
-2. If `prd/{TASK}/implementation-plan.md` exists — read it for implementation guidance
-3. If other task documents exist (e.g., `investigation-report.md`, `test-plan.md`) — read them for additional context
+1. Read `wiki/tasks/{TASK}/summary.md` if it exists — use it as the concise current state
+2. Read `wiki/tasks/{TASK}/handoff.md` if it exists — use it for next-step context
+3. Read `wiki/tasks/{TASK}/heartbeat.md` if it exists — use it for blockers, dependencies, and next owner
+4. Read `prd/{TASK}/requirements.md` — understand what needs to be built
+5. If `prd/{TASK}/implementation-plan.md` exists — read it for implementation guidance
+6. If other task documents exist (e.g., `investigation-report.md`, `test-plan.md`) — read them for additional context
 
-**Output:** Full understanding of task requirements and existing decisions
+**Output:** Current task state understood without loading unrelated history
 
 ### Step 4: Switch to Task Branch
 
@@ -63,6 +66,7 @@ Read these files before proceeding:
 3. Follow code quality rules from `roles/coder/code-quality.md`
 4. Follow testing rules from `roles/coder/testing-rules.md`
 5. If additional context needed — discuss with user before proceeding
+6. Update observations, heartbeat, implementation progress, and any handoff notes
 
 **Output:** Implementation complete, code ready for commit
 
@@ -75,6 +79,7 @@ Read these files before proceeding:
 4. If task continues — commit but do not close; update task status if local task tracking is used
 5. If PR needed — follow `roles/manager/pr-description.md`
 6. If ticket update needed — follow `roles/manager/update-ticket.md`
+7. Reflect observations when needed, then update commit/PR links, status, heartbeat, and final or next-role handoff
 
 **Output:** Changes committed, task status updated
 
@@ -94,7 +99,7 @@ User Request (continue task X)
     ↓
 Locate task in prd.md
     ↓
-Read requirements/implementation-plan
+Read task wiki + requirements/implementation-plan
     ↓
 Switch branch
     ↓
@@ -118,5 +123,6 @@ Manager (commit/close or commit/continue)
 
 - Git commit(s) — implementation committed
 - Task status updated (in `prd/prd.md` or local task tracking)
+- Task wiki updated in `wiki/tasks/{TASK}/` (local-only)
 - Pull request (optional) — if task complete and specified in `project/context.md`
 - Ticket update (optional) — if issue tracker configured in `project/context.md`

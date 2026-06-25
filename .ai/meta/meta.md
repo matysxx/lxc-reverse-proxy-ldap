@@ -4,6 +4,8 @@ This directory contains tools for initializing, auditing, and maintaining the `.
 
 These files are **portable** — they work across any project.
 
+The installed `.ai/wiki/` directory provides local-only task context exchange for agents. Its policy and templates are portable, but `wiki/tasks/` entries are operational memory and must not be committed.
+
 ## Files
 
 | File | When to use |
@@ -32,3 +34,4 @@ These files are **portable** — they work across any project.
 2. Agent reads `init.md` → determines mode (full scaffold vs audit)
 3. Agent runs discovery (`discovery.md`) → auto-detects what it can, asks user the rest
 4. Agent generates/updates project-specific files from templates
+5. Agent verifies local task wiki ignore rules so cross-role context remains private

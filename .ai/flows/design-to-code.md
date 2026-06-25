@@ -33,8 +33,11 @@ Read these files before proceeding:
 1. Determine the task number — check `prd/prd.md` for the next free `{PROJECT_KEY}-N`
 2. Determine the task name and description with the user (if not provided)
 3. Create branch and task directory — follow `roles/manager/create-task.md` OR `roles/manager/create-task-from-ticket.md` if creating from an issue tracker ticket
+4. Create local task wiki directory: `wiki/tasks/{PROJECT_KEY}-{N}/`
+5. Initialize `wiki/tasks/{PROJECT_KEY}-{N}/summary.md` from `wiki/task-summary-template.md`
+6. Initialize `observations.md`, `reflection.md`, and `heartbeat.md` from the wiki templates
 
-**Output:** Branch created, task directory created, task registered in `prd/prd.md`
+**Output:** Branch created, task directory created, task registered in `prd/prd.md`, local task wiki initialized
 
 ### Step 3: Create Requirements
 
@@ -43,6 +46,7 @@ Read these files before proceeding:
 2. Create requirements document — follow `roles/designer/create-requirements.md`
 3. Present requirements to user for approval
 4. Wait for user approval before proceeding
+5. Update observations, heartbeat, approved scope, decisions, and artifact links
 
 **Output:** `{TASK}/requirements.md` — approved requirements document
 
@@ -54,6 +58,7 @@ Read these files before proceeding:
 3. Create implementation plan — follow `roles/designer/create-implementation-plan.md`
 4. Present implementation plan to user for approval
 5. Wait for user approval before proceeding
+6. Reflect observations into the summary, then update implementation decisions and Coder handoff
 
 **Output:** `{TASK}/implementation-plan.md` — approved implementation plan
 
@@ -61,10 +66,12 @@ Read these files before proceeding:
 
 **Coder role:**
 1. Read the implementation plan
-2. Implement the solution — follow `roles/coder/coder.md`
-3. Follow coding standards from `roles/coder/coding-standards.md`
-4. Follow code quality rules from `roles/coder/code-quality.md`
-5. Follow testing rules from `roles/coder/testing-rules.md`
+2. Read the task wiki summary and latest handoff
+3. Implement the solution — follow `roles/coder/coder.md`
+4. Follow coding standards from `roles/coder/coding-standards.md`
+5. Follow code quality rules from `roles/coder/code-quality.md`
+6. Follow testing rules from `roles/coder/testing-rules.md`
+7. Update observations, heartbeat, changed files, tests, open questions, and Manager handoff
 
 **Output:** Implementation complete, code ready for commit
 
@@ -111,6 +118,7 @@ Manager (commit/close)
 - `prd/prd.md` — task entry added
 - `prd/{TASK}/requirements.md` — requirements document
 - `prd/{TASK}/implementation-plan.md` — implementation plan document
+- `wiki/tasks/{TASK}/` — local-only task context summary and handoff notes
 - Git branch — feature/task branch created
 - Git commit(s) — implementation committed
 - Pull request (optional) — if specified in `project/context.md`

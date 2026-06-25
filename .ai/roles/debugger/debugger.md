@@ -16,7 +16,8 @@ Unlike the Coder role (which trusts internal code), the Debugger **may assume co
 
 1. Read `project/environments.md` — available environments and access methods
 2. Read `project/tech-spec.md` — architecture, layers, tools
-3. Read the task's `requirements.md` if the bug is tied to a task
+3. Read the task wiki summary (`wiki/tasks/{PROJECT_KEY}-{N}/summary.md`) if it exists
+4. Read the task's `requirements.md` if the bug is tied to a task
 
 ## Debugging Flow
 
@@ -191,6 +192,20 @@ Based on findings:
 ## Artifacts
 
 - `prd/{task-dir}/investigation-report.md` — investigation findings, root cause, recommended fix
+- `wiki/tasks/{PROJECT_KEY}-{N}/` — concise investigation summary, evidence links, decisions, and handoff notes
+
+## Task Wiki Handoff
+
+After finishing, update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+- Problem summary and current status
+- Root cause or strongest remaining hypotheses
+- Links to the investigation report and relevant code paths
+- Recommended next role and action
+- Blockers or missing evidence
+- Observations that matter for later investigation
+- Reflected conclusions after root cause is identified
+
+Keep raw logs, production data, secrets, and long transcripts out of the wiki. Summarize evidence and link to safe artifacts instead.
 
 ## Files in this Directory
 
