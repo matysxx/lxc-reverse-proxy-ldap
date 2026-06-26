@@ -196,7 +196,9 @@ Based on findings:
 
 ## Task Wiki Handoff
 
-After finishing, update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+Before ending work, update `wiki/tasks/{PROJECT_KEY}-{N}/`. This is mandatory even if the user does not explicitly ask for it.
+
+Include:
 - Problem summary and current status
 - Root cause or strongest remaining hypotheses
 - Links to the investigation report and relevant code paths

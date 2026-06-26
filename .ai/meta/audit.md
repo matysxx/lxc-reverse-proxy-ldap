@@ -179,6 +179,7 @@ Verify `.gitignore` contains rules for AI instruction files:
 [ ] .ai/prd/prd.md is excluded from ignore (committed)
 [ ] task-status.local.md is effectively ignored (covered by prd/* or explicit rule)
 [ ] .ai/wiki/tasks/ is ignored
+[ ] .ai/wiki/ itself is not ignored, so reusable wiki policy/templates can be committed
 ```
 
 ### 10. PRD Consistency
@@ -200,6 +201,8 @@ Verify `.gitignore` contains rules for AI instruction files:
 [ ] Task wiki entries are concise and link to artifacts instead of duplicating long content
 [ ] No secrets, credentials, raw production data, or long chat transcripts are stored in wiki/tasks/
 [ ] wiki/tasks/ is local-only and not staged for commit
+[ ] No files under wiki/tasks/** are staged for commit
+[ ] Any committed project/context snapshot is sanitized and stored outside wiki/tasks/
 ```
 
 ---

@@ -127,6 +127,7 @@ Add these rules to the project's `.gitignore` (check if they already exist first
 
 > This ensures task directories (requirements, plans) stay local, while the task index is committed. The `task-status.local.md` is covered by the `prd/*` wildcard.
 > This also ensures task wiki entries stay local and cannot be committed accidentally.
+> Do not ignore the whole `.ai/wiki/` directory. Only `tasks/` is local-only; policy and template files are reusable procedure.
 
 #### 2.5 Run Discovery
 
@@ -142,6 +143,8 @@ Based on discovery results, generate:
 - `prd/prd.md` — empty task index with correct `{PROJECT_KEY}`
 - `prd/task-status.local.md` — empty status file
 - `wiki/tasks/` — empty local-only task wiki directory; task files are created from wiki templates when a task starts
+
+Before committing generated project files, verify that `project/` files contain no private IPs, customer data, hostnames, credentials, production paths, service maps, logs, or host-local configuration. If a project snapshot is needed in Git, store it as a sanitized project document such as `project/context-snapshot.md`, not inside `wiki/tasks/`.
 
 #### 2.7 Verify
 
@@ -167,6 +170,7 @@ The `.ai/` structure already exists. Run the audit to find gaps.
 - Portable files (`roles/`, `meta/`) must not contain project-specific content. If they do after init, something went wrong.
 - `project/` and `prd/` are project-specific and generated per-project.
 - `wiki/tasks/` is local operational memory. Never commit task-specific wiki entries.
+- GitHub should contain reusable procedure and templates; local-only files should contain session memory, heartbeat, observations, handoffs, status, and deployment details.
 
 ## Artifacts
 

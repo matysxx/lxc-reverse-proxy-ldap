@@ -57,6 +57,25 @@ When continuing work on an existing task:
 7. Reflect observations into `summary.md` when a phase completes or context grows too large
 8. Follow commit and close-task procedures
 
+## Mandatory Final Context Dump
+
+Before ending any task, update the local task wiki. This is mandatory even if the user does not explicitly ask for it.
+
+If a task key is known, update:
+
+- `wiki/tasks/{TASK_KEY}/summary.md`
+- `wiki/tasks/{TASK_KEY}/heartbeat.md`
+- `wiki/tasks/{TASK_KEY}/handoff.md`
+- `wiki/tasks/{TASK_KEY}/observations.md`
+
+When a meaningful phase completed, context grew, or the next agent needs compressed reasoning, also update:
+
+- `wiki/tasks/{TASK_KEY}/reflection.md`
+
+If no task key is known, create or reuse a reasonable local task key, for example `wiki/tasks/{PROJECT_KEY}-context-snapshot/`.
+
+The dump must include current status, what changed, files touched, decisions made, blockers, assumptions, next recommended action, and handoff notes for the next agent.
+
 ## Environment Access
 
 When debugging or verifying deployments, read:
@@ -68,5 +87,6 @@ When debugging or verifying deployments, read:
 - **Do not modify portable files** in `roles/` or `meta/` — they are shared across projects.
 - **Project-specific content** goes in `project/` and `prd/` only.
 - **Task wiki entries** in `wiki/tasks/` are local operational memory and must not be committed.
+- **GitHub stores procedure and templates**; local-only files store session memory, heartbeat, observations, handoffs, status, and deployment details.
 - **Always ask before** making assumptions that could change scope.
 - **Follow the tech-spec** — use the project's tools, not your defaults.

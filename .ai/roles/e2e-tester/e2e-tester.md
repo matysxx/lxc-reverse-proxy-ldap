@@ -80,7 +80,9 @@ E2E test creation follows a **two-session workflow** to keep planning and execut
 
 ## Task Wiki Handoff
 
-After each session, update `wiki/tasks/{PROJECT_KEY}-{N}/` with concise testing context:
+Before ending each session, update `wiki/tasks/{PROJECT_KEY}-{N}/` with concise testing context. This is mandatory even if the user does not explicitly ask for it.
+
+Include:
 - Planned or implemented test coverage
 - Required `data-testid` changes
 - Page objects, fixtures, or specs touched

@@ -67,7 +67,9 @@ Task statuses are tracked in `prd/task-status.local.md` (gitignored, local only)
 
 ## Task Wiki Handoff
 
-When creating, updating, or closing a task, update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+When creating, updating, or closing a task, update `wiki/tasks/{PROJECT_KEY}-{N}/`. Before ending work, this update is mandatory even if the user does not explicitly ask for it.
+
+Include:
 - Current task status and branch
 - Commit, PR, or ticket links
 - QA status and remaining risks

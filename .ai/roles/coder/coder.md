@@ -37,7 +37,9 @@ Entry point for the coder role. Guides implementation work — coding standards,
 
 ## After Finishing
 
-Update `wiki/tasks/{PROJECT_KEY}-{N}/` with:
+Before ending work, update `wiki/tasks/{PROJECT_KEY}-{N}/`. This is mandatory even if the user does not explicitly ask for it.
+
+Include:
 - What was implemented and which files changed
 - Key implementation decisions and tradeoffs
 - Tests added or run, with concise results

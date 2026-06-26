@@ -31,7 +31,9 @@ Entry point for the designer role. Guides requirements gathering, solution desig
 
 ## Task Wiki Handoff
 
-After finishing, update `wiki/tasks/{PROJECT_KEY}-{N}/`:
+Before ending work, update `wiki/tasks/{PROJECT_KEY}-{N}/`. This is mandatory even if the user does not explicitly ask for it.
+
+Update:
 - `summary.md` — current state, approved scope, and next role
 - `decisions.md` — durable design decisions and rationale
 - `artifacts.md` — links to requirements, implementation plan, ADRs, or related files

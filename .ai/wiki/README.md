@@ -86,3 +86,19 @@ After finishing work:
 3. Update `handoff.md` before switching roles or stopping work.
 4. Reflect observations into `summary.md` when context has grown or a phase completed.
 5. Keep only information needed by the next agent in active files.
+
+## Mandatory Final Context Dump
+
+Before ending any task, every agent must update the local task wiki. This is mandatory even if the user does not explicitly ask for it.
+
+If a task key is known, update:
+- `wiki/tasks/{TASK_KEY}/summary.md`
+- `wiki/tasks/{TASK_KEY}/heartbeat.md`
+- `wiki/tasks/{TASK_KEY}/handoff.md`
+- `wiki/tasks/{TASK_KEY}/observations.md`
+
+Also update `wiki/tasks/{TASK_KEY}/reflection.md` when a meaningful phase completed, context grew, or the next agent needs compressed reasoning.
+
+If no task key is known, create or reuse a reasonable local task key, for example `wiki/tasks/{PROJECT_KEY}-context-snapshot/`.
+
+The dump must capture current status, what changed, files touched, decisions made, blockers, assumptions, next recommended action, and handoff notes. Never commit `wiki/tasks/**`.
