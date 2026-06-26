@@ -12,3 +12,4 @@ config/ldap/examples/piotrmatysek.vitrobud.ldif
 config/ldap/examples/*.local.ldif
 config/ldap/examples/*.private.ldif
 .ai/wiki/tasks/
+.ai/prd/task-status.local.md
