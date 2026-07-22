@@ -43,6 +43,7 @@ Ten wariant jest wystarczający dla `slapd`, `nginx` i integracji z Nextcloud.
 - `docs/logging.md` - logi usług i rotacja logów
 - `proxmox/` - notatki dla LXC w Proxmox
 - `templates/service-index/` - szablony statycznych stron startowych usług
+- `templates/nginx/` - zanonimizowane szablony dodatkowych vhostów `nginx`
 - `runtime/certs/` - miejsce na tymczasowe paczki certyfikatów do importu
 - `.ai/` - repo-scoped workflow i kontekst projektu dla agentów
 - `.codex/AGENTS.md` - repo-scoped entrypoint dla narzędzi Codex
@@ -137,6 +138,11 @@ Szablon portalu usług znajduje się w:
 
 - `templates/service-index/index.html`
 - `templates/service-index/user-portal.html`
+
+Szablony dodatkowych host-local reverse proxy znajdują się w:
+
+- `templates/nginx/browser-app.conf.example`
+- `templates/nginx/collabora-office.conf.example`
 
 Aktywną stronę indeksową publikuj lokalnie na LXC poza repo, np. jako:
 

@@ -109,6 +109,11 @@ openssl s_client -connect "${LDAP_HOSTNAME}:${LDAP_LDAPS_PORT}" -servername "${L
 Lokalne vhosty i reverse proxy dla usług klienta powinny być utrzymywane poza
 repo, bezpośrednio na hoście, np. w `/etc/nginx/conf.d/`.
 
+Repo zawiera wyłącznie zanonimizowane szablony pomocnicze:
+
+- `templates/nginx/browser-app.conf.example` - typowa aplikacja WWW za HTTPS
+- `templates/nginx/collabora-office.conf.example` - Collabora/Nextcloud Office
+
 Jeżeli chcesz wystawić portal startowy usług, użyj repozytoryjnego szablonu:
 
 - `templates/service-index/index.html`
