@@ -114,6 +114,17 @@ Repo zawiera wyłącznie zanonimizowane szablony pomocnicze:
 - `templates/nginx/browser-app.conf.example` - typowa aplikacja WWW za HTTPS
 - `templates/nginx/collabora-office.conf.example` - Collabora/Nextcloud Office
 
+Szablon `browser-app.conf.example` zawiera opcjonalny blok zgodności dla
+aplikacji przeglądarkowych opartych o `WASM`, `WebGL` lub `WebGPU`. Używaj go
+host-local, gdy aplikacja działa bezpośrednio po `HTTP/IP`, ale po `HTTPS`
+przez reverse proxy ma problem z rendererem w Safari. Przed użyciem ustaw
+anonimowe placeholdery na lokalne wartości:
+
+- `{{SERVICE_HOSTNAME}}`
+- `{{SERVICE_LOG_NAME}}`
+- `{{SERVICE_BACKEND_URL}}`
+- `{{SERVICE_UPSTREAM_HOST_HEADER}}`
+
 Jeżeli chcesz wystawić portal startowy usług, użyj repozytoryjnego szablonu:
 
 - `templates/service-index/index.html`

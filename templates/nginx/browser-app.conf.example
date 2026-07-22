@@ -36,13 +36,43 @@ server {
   location / {
     proxy_pass {{SERVICE_BACKEND_URL}};
     proxy_http_version 1.1;
-    proxy_set_header Host $host;
+    proxy_set_header Host {{SERVICE_UPSTREAM_HOST_HEADER}};
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header X-Forwarded-Host $host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
+    proxy_buffering off;
+
+    # Optional WASM/WebGPU compatibility block.
+    # Use for browser apps that render black screens in Safari over HTTPS while
+    # working through direct HTTP/IP or Chromium-based browsers.
+    # Keep this host-local unless it is safe and generic for the environment.
+    proxy_set_header Accept-Encoding "";
+    proxy_hide_header Cross-Origin-Embedder-Policy;
+    proxy_hide_header Cross-Origin-Opener-Policy;
+    proxy_hide_header Cross-Origin-Resource-Policy;
+    proxy_hide_header Permissions-Policy;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), webgpu=()" always;
+    sub_filter_once on;
+    sub_filter '<script type="module">' '<script>
+(function () {
+  var ua = navigator.userAgent || "";
+  var isSafari = /Safari/i.test(ua) && !/Chrome|Chromium|CriOS|FxiOS|Edg/i.test(ua);
+  if (!isSafari) return;
+  try {
+    Object.defineProperty(Navigator.prototype, "gpu", {
+      configurable: true,
+      get: function () { return undefined; }
+    });
+  } catch (e) {
+    try { navigator.gpu = undefined; } catch (_) {}
+  }
+})();
+</script>
+<script type="module">';
+
     proxy_redirect off;
   }
 }
