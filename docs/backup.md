@@ -43,6 +43,30 @@ Wynik:
 - automatyczne usunięcie najstarszych archiwów ponad `BACKUP_KEEP_COUNT`
 - czytelne logi startu, końca i rotacji na standardowym wyjściu
 
+## Lokalna kopia prywatna
+
+Po wykonaniu backupu na LXC można pobrać najnowsze archiwum do lokalnego
+katalogu roboczego:
+
+```text
+runtime/host-local-backups/<hostname>/
+```
+
+Ten katalog jest objęty regułą `runtime/*` w `.gitignore`, więc lokalne kopie
+backupów nie są przeznaczone do GitHub.
+
+Zasady:
+
+- backupy host-local mogą zawierać prywatne adresy, certyfikaty, sekrety,
+  vhosty i aktywne indeksy usług
+- nie wolno ich dodawać do Git
+- dokumentacja w Git opisuje wyłącznie procedurę i ścieżkę lokalną
+- po pobraniu backupu warto sprawdzić ignorowanie przez Git:
+
+```bash
+git check-ignore -v runtime/host-local-backups/<hostname>/backup-example.tar.gz
+```
+
 ## Restore
 
 Skrypt:
