@@ -42,6 +42,7 @@ apt-get install -y \
   logrotate \
   mc \
   nginx \
+  libnginx-mod-stream \
   openssl \
   slapd
 
