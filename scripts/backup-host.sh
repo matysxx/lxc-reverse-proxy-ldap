@@ -19,6 +19,8 @@ fi
 
 BACKUP_ROOT="${BACKUP_ROOT:-/var/backups/lxc-reverse-proxy-ldap}"
 BACKUP_KEEP_COUNT="${BACKUP_KEEP_COUNT:-14}"
+BACKUP_SECRET_PASSPHRASE_FILE="${BACKUP_SECRET_PASSPHRASE_FILE:-/root/lxc-reverse-proxy-ldap-backup.passphrase}"
+BACKUP_ENCRYPTED_SECRET_GLOBS="${BACKUP_ENCRYPTED_SECRET_GLOBS:-/root/ldap-mail-integration/*.secret}"
 SLAPCAT_BIN="$(command -v slapcat || true)"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 HOSTNAME_SHORT="$(hostname -s)"
@@ -54,6 +56,7 @@ install -d -m 0755 "${BACKUP_ROOT}"
 install -d -m 0755 "${STAGING_DIR}/ldap"
 install -d -m 0755 "${STAGING_DIR}/files"
 install -d -m 0755 "${STAGING_DIR}/meta"
+install -d -m 0700 "${STAGING_DIR}/secrets"
 
 log "Starting backup for ${HOSTNAME_SHORT}"
 log "Using slapcat at ${SLAPCAT_BIN}"
@@ -62,6 +65,7 @@ log "Using slapcat at ${SLAPCAT_BIN}"
 "${SLAPCAT_BIN}" -n 1 -l "${STAGING_DIR}/ldap/data.ldif"
 
 copy_into_bundle "/etc/lxc-reverse-proxy-ldap" "${STAGING_DIR}/files"
+copy_into_bundle "/etc/ldap/tls" "${STAGING_DIR}/files"
 copy_into_bundle "/etc/nginx/conf.d" "${STAGING_DIR}/files"
 copy_into_bundle "/etc/nginx/nginx.conf" "${STAGING_DIR}/files"
 copy_into_bundle "/etc/default/slapd" "${STAGING_DIR}/files"
@@ -71,11 +75,46 @@ copy_into_bundle "/etc/apache2/ports.conf" "${STAGING_DIR}/files"
 copy_into_bundle "/var/www/service-index" "${STAGING_DIR}/files"
 copy_into_bundle "/root/lxc-reverse-proxy-ldap.secrets" "${STAGING_DIR}/files"
 
+if [[ -f "${BACKUP_SECRET_PASSPHRASE_FILE}" ]]; then
+  SECRET_WORKDIR="${WORKDIR}/private-secrets"
+  install -d -m 0700 "${SECRET_WORKDIR}/files"
+  found_secret=0
+
+  while IFS= read -r secret_glob; do
+    [[ -n "${secret_glob}" ]] || continue
+    while IFS= read -r secret_path; do
+      [[ -e "${secret_path}" ]] || continue
+      found_secret=1
+      install -d -m 0700 "${SECRET_WORKDIR}/files/$(dirname "${secret_path}")"
+      cp -a "${secret_path}" "${SECRET_WORKDIR}/files/${secret_path}"
+    done < <(compgen -G "${secret_glob}" || true)
+  done < <(tr ':' '\n' <<< "${BACKUP_ENCRYPTED_SECRET_GLOBS}")
+
+  if (( found_secret )); then
+    tar -C "${SECRET_WORKDIR}" -czf - . \
+      | openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 \
+          -pass "file:${BACKUP_SECRET_PASSPHRASE_FILE}" \
+          -out "${STAGING_DIR}/secrets/private-secrets.tar.gz.enc"
+    chmod 0600 "${STAGING_DIR}/secrets/private-secrets.tar.gz.enc"
+    (
+      cd "${STAGING_DIR}"
+      sha256sum "secrets/private-secrets.tar.gz.enc" > "meta/private-secrets.sha256"
+    )
+    log "Encrypted private secrets bundle created"
+  else
+    log "No files matched BACKUP_ENCRYPTED_SECRET_GLOBS; encrypted secrets bundle skipped"
+  fi
+else
+  log "Encrypted secrets bundle skipped: passphrase file not found at ${BACKUP_SECRET_PASSPHRASE_FILE}"
+fi
+
 cat > "${STAGING_DIR}/meta/backup.env" <<EOF
 BACKUP_TIMESTAMP=${STAMP}
 BACKUP_HOSTNAME=${HOSTNAME_SHORT}
 BACKUP_ROOT=${BACKUP_ROOT}
 ENV_FILE=${ENV_FILE}
+BACKUP_SECRET_PASSPHRASE_FILE=${BACKUP_SECRET_PASSPHRASE_FILE}
+BACKUP_ENCRYPTED_SECRET_GLOBS=${BACKUP_ENCRYPTED_SECRET_GLOBS}
 EOF
 
 dpkg-query -W slapd nginx apache2 phpldapadmin mc > "${STAGING_DIR}/meta/packages.txt" 2>/dev/null || true

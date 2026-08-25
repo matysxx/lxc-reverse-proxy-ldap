@@ -9,12 +9,15 @@ Mechanizm obejmuje:
 - host-local konfigurację z `/etc/lxc-reverse-proxy-ldap`
 - host-local vhosty `nginx` z `/etc/nginx/conf.d`
 - wybrane pliki pomocnicze:
+  - `/etc/ldap/tls`
   - `/etc/default/slapd`
   - `/etc/phpldapadmin/config_local.php`
   - `/etc/phpldapadmin/apache.conf`
   - `/etc/apache2/ports.conf`
   - `/var/www/service-index`
   - `/root/lxc-reverse-proxy-ldap.secrets`
+- opcjonalny szyfrowany pakiet prywatnych sekretów, np. sekretów kont
+  technicznych LDAP
 
 ## Backup rotacyjny
 
@@ -30,6 +33,18 @@ Domyślne parametry:
 Możesz je nadpisać przez host-local:
 
 - `/etc/lxc-reverse-proxy-ldap/env`
+
+Sekrety prywatne mogą być dopakowane wyłącznie jako szyfrowany pakiet, jeśli na
+hoście istnieje plik hasła:
+
+- `BACKUP_SECRET_PASSPHRASE_FILE=/root/lxc-reverse-proxy-ldap-backup.passphrase`
+
+Domyślnie skrypt szuka sekretów technicznych pasujących do:
+
+- `/root/ldap-mail-integration/*.secret`
+
+Listę można zmienić zmienną `BACKUP_ENCRYPTED_SECRET_GLOBS`, rozdzielając
+wzorce dwukropkiem. Plik hasła do backupu nie jest umieszczany w archiwum.
 
 Przykład ręcznego uruchomienia:
 

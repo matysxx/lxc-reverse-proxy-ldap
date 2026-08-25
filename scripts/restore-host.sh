@@ -50,6 +50,7 @@ WORKDIR="$(mktemp -d)"
 ROLLBACK_ROOT="/var/backups/lxc-reverse-proxy-ldap"
 ROLLBACK_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 ROLLBACK_ARCHIVE="${ROLLBACK_ROOT}/pre-restore-${ROLLBACK_STAMP}.tar.gz"
+BACKUP_SECRET_PASSPHRASE_FILE="${BACKUP_SECRET_PASSPHRASE_FILE:-/root/lxc-reverse-proxy-ldap-backup.passphrase}"
 
 cleanup() {
   rm -rf "${WORKDIR}"
@@ -78,6 +79,16 @@ done
 
 log "Backup archive structure verified: ${ARCHIVE_PATH}"
 
+if [[ -f "${extract_path}/secrets/private-secrets.tar.gz.enc" ]]; then
+  if [[ -f "${extract_path}/meta/private-secrets.sha256" ]]; then
+    (cd "${extract_path}" && sha256sum -c "meta/private-secrets.sha256")
+    log "Encrypted private secrets checksum verified"
+  else
+    echo "Backup contains encrypted private secrets but lacks meta/private-secrets.sha256" >&2
+    exit 1
+  fi
+fi
+
 if [[ "${MODE_FLAG}" == "--verify-only" ]]; then
   log "Verification finished successfully"
   exit 0
@@ -86,9 +97,11 @@ fi
 install -d -m 0755 "${ROLLBACK_ROOT}"
 tar -czf "${ROLLBACK_ARCHIVE}" \
   /etc/lxc-reverse-proxy-ldap \
+  /etc/ldap/tls \
   /etc/nginx/conf.d \
   /etc/default/slapd \
   /var/www/service-index \
+  /root/ldap-mail-integration \
   /root/lxc-reverse-proxy-ldap.secrets \
   /etc/phpldapadmin/config_local.php \
   /etc/phpldapadmin/apache.conf \
@@ -113,6 +126,7 @@ restore_copy() {
 }
 
 restore_copy "${extract_path}/files/etc/lxc-reverse-proxy-ldap" "/etc/lxc-reverse-proxy-ldap"
+restore_copy "${extract_path}/files/etc/ldap/tls" "/etc/ldap/tls"
 restore_copy "${extract_path}/files/etc/nginx/conf.d" "/etc/nginx/conf.d"
 restore_copy "${extract_path}/files/etc/nginx/nginx.conf" "/etc/nginx/nginx.conf"
 restore_copy "${extract_path}/files/etc/default/slapd" "/etc/default/slapd"
@@ -121,6 +135,21 @@ restore_copy "${extract_path}/files/etc/phpldapadmin/apache.conf" "/etc/phpldapa
 restore_copy "${extract_path}/files/etc/apache2/ports.conf" "/etc/apache2/ports.conf"
 restore_copy "${extract_path}/files/var/www/service-index" "/var/www/service-index"
 restore_copy "${extract_path}/files/root/lxc-reverse-proxy-ldap.secrets" "/root/lxc-reverse-proxy-ldap.secrets"
+
+if [[ -f "${extract_path}/secrets/private-secrets.tar.gz.enc" ]]; then
+  if [[ ! -f "${BACKUP_SECRET_PASSPHRASE_FILE}" ]]; then
+    echo "Encrypted private secrets are present, but passphrase file is missing: ${BACKUP_SECRET_PASSPHRASE_FILE}" >&2
+    exit 1
+  fi
+
+  SECRET_EXTRACT_PATH="$(mktemp -d)"
+  openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+    -pass "file:${BACKUP_SECRET_PASSPHRASE_FILE}" \
+    -in "${extract_path}/secrets/private-secrets.tar.gz.enc" \
+    | tar -C "${SECRET_EXTRACT_PATH}" -xzf -
+  restore_copy "${SECRET_EXTRACT_PATH}/files/root/ldap-mail-integration" "/root/ldap-mail-integration"
+  rm -rf "${SECRET_EXTRACT_PATH}"
+fi
 
 rm -rf /etc/ldap/slapd.d/* /var/lib/ldap/*
 slapadd -F /etc/ldap/slapd.d -n 0 -l "${extract_path}/ldap/config.ldif"
