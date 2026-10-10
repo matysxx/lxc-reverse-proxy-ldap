@@ -71,6 +71,7 @@ if [[ -f /etc/default/slapd ]]; then
   sed -i "s|^SLAPD_SERVICES=.*|SLAPD_SERVICES=\"${slapd_services}\"|" /etc/default/slapd
 fi
 
+bash "${ROOT_DIR}/scripts/setup-nginx-startup.sh"
 systemctl enable slapd nginx
 systemctl restart slapd
 
