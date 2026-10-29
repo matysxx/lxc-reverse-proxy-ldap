@@ -111,6 +111,10 @@ repo, bezpośrednio na hoście, np. w `/etc/nginx/conf.d/`.
 
 Repo zawiera wyłącznie zanonimizowane szablony pomocnicze:
 
+- `templates/nginx/verified-edge.conf.example` i
+  `templates/nginx/verified-edge-route.conf.example` - przygotowanie pojedynczego
+  edge HTTPS z obowiązkową walidacją TLS; procedura: `docs/verified-edge.md`
+
 - `templates/nginx/browser-app.conf.example` - typowa aplikacja WWW za HTTPS
 - `templates/nginx/collabora-office.conf.example` - Collabora/Nextcloud Office
 
