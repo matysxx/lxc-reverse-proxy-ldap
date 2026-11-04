@@ -158,6 +158,26 @@ ldapadd -x -D "cn=admin,dc=<twoja>,dc=<domena>" -W -f config/ldap/examples/users
 ldapadd -x -D "cn=admin,dc=<twoja>,dc=<domena>" -W -f config/ldap/examples/groups.sample.ldif
 ```
 
+### Grupa operatorów
+
+Utwórz osobną grupę `operator` typu `posixGroup` z wolnym GID. Poniższy
+LDIF jest przykładem; przed importem podstaw własny DN i sprawdź,
+czy wybrany GID nie jest już używany.
+
+```ldif
+dn: cn=operator,ou=groups,dc=example,dc=internal
+objectClass: top
+objectClass: posixGroup
+cn: operator
+gidNumber: 20003
+```
+
+Brak `memberUid` oznacza pustą grupę. Dodawaj członków dopiero po
+przypisaniu grupie ograniczonej roli w danej aplikacji. LDAP przechowuje
+członkostwo, ale nie nadaje uprawnień aplikacyjnych ani nie ustala
+hierarchii grup według GID. Nie mapuj tej grupy na rolę administratora.
+Produkcyjny LDIF i stan wdrożenia przechowuj poza Git.
+
 ## 8. DNS
 
 Dodaj rekordy DNS wskazujące na adres LXC:
