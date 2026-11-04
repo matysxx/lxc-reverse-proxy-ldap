@@ -40,6 +40,12 @@ TLS, Web, full API path/query forwarding, sanitized headers and a real WebSocket
 handshake without production writes. A failed or absent edge is expected during
 preparation and must not trigger an insecure HTTP fallback.
 
+For nginx 1.26.x, use a backend certificate with a DNS SAN matching
+`proxy_ssl_name`, even when `proxy_pass` connects to an IP address.
+An IP-only SAN is not sufficient for nginx's upstream hostname check.
+Reuse the managed frontend certificate on the proxy; issue a separate
+backend certificate and key, preferably signed by the internal CA.
+
 Keep copies of the original indexes and vhost before deployment outside Git.
 Rollback routing by restoring the maintenance include, validating configuration
 and reloading. Restore the saved indexes if the portal change is rolled back.
